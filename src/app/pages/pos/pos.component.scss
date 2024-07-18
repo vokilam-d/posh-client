@@ -1,0 +1,16 @@
+.page {
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
+  overflow: hidden;
+
+  &__cart {
+    width: 30%;
+    flex-shrink: 0;
+  }
+
+  &__products {
+    flex-grow: 2;
+    background: #eee;
+  }
+}

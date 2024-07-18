@@ -1,0 +1,26 @@
+<div
+  class="product"
+  (click)="onClick()"
+>
+  <div class="product__photo">
+
+    @if (product().photoUrl) {
+    <img
+      class="product__img"
+      [ngSrc]="product().photoUrl || ''"
+      fill
+      [alt]="product().name"
+    >
+    }
+  </div>
+
+  <div class="product__name">
+    {{ product().name }}
+  </div>
+
+  @if (!product().isCategory) {
+  <div class="product__price">
+    {{ product().price }} грн
+  </div>
+  }
+</div>

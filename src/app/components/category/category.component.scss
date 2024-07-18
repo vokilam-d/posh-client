@@ -1,0 +1,11 @@
+.category {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 12px 24px;
+  overflow: auto;
+  max-height: 100%;
+
+  &__product {
+    margin: 0 20px 20px 0;
+  }
+}

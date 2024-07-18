@@ -1,0 +1,43 @@
+<div class="cart">
+
+  <div class="cart__items">
+    @for (cartItem of cartService.cartItems(); track cartItem; let index = $index) {
+      <div class="cart__item cart-item">
+        <div class="cart-item__name">
+          {{ cartItem.productName }}
+        </div>
+
+        <div class="cart-item__counter">
+          <button
+            class="cart-item__inc-dec material-symbols-outlined"
+            (click)="cartService.decrementQty(index)"
+          >
+            do_not_disturb_on
+          </button>
+
+          <input
+            class="cart-item__count"
+            [(ngModel)]="cartItem.qty"
+            type="number"
+            [min]="0"
+          >
+
+          <button
+            class="cart-item__inc-dec material-symbols-outlined"
+            (click)="cartService.incrementQty(index)"
+          >
+            add_circle
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <button
+    class="cart__buy"
+    (click)="buy()"
+    [disabled]="!cartService.cartItems().length"
+  >
+    Розрахувати
+  </button>
+</div>
