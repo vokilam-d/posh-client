@@ -1,10 +1,14 @@
 <div class="cart">
 
   <div class="cart__items">
-    @for (cartItem of cartService.cartItems(); track cartItem; let index = $index) {
+    @for (cartItem of cartService.cartItems(); track cartItem.productId; let index = $index) {
       <div class="cart__item cart-item">
         <div class="cart-item__name">
           {{ cartItem.productName }}
+        </div>
+
+        <div class="cart-item__price">
+          {{ cartItem.price }} грн
         </div>
 
         <div class="cart-item__counter">
@@ -29,6 +33,10 @@
             add_circle
           </button>
         </div>
+
+        <div class="cart-item__cost">
+          {{ cartItem.price * cartItem.qty }} грн
+        </div>
       </div>
     }
   </div>
@@ -38,6 +46,6 @@
     (click)="buy()"
     [disabled]="!cartService.cartItems().length"
   >
-    Розрахувати
+    Розрахувати @if (cartService.cartItems().length) { - {{ cartService.totalCost() }} грн }
   </button>
 </div>

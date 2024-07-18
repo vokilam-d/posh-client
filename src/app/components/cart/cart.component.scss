@@ -7,11 +7,12 @@
 
   &__buy {
     width: 100%;
-    padding: 8px 16px;
+    padding: 12px 16px;
     border-radius: 2px;
     background: var(--accent);
     color: var(--accent-text-color);
     font-size: 18px;
+    font-weight: 600;
     transition: background-color 0.2s ease;
 
     &:hover:not([disabled]),
@@ -28,7 +29,6 @@
 
 .cart-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   font-size: 16px;
 
@@ -38,14 +38,25 @@
     border-bottom: 1px solid #ccc;
   }
 
+  &__name {
+    min-width: 0;
+  }
+
+  &__price {
+    margin: 0 0 0 auto;
+    flex-shrink: 0;
+  }
+
   &__counter {
+    margin: 0 0 0 4px;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
   }
 
   &__count {
     margin: 0 4px;
-    width: 90px;
+    width: 55px;
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 4px 8px;
@@ -54,5 +65,15 @@
   }
 
   &__inc-dec {
+    font-size: 32px;
+    font-weight: 300;
+    color: #444;
+  }
+
+  &__cost {
+    width: 70px;
+    margin: 0 0 0 8px;
+    text-align: right;
+    flex-shrink: 0;
   }
 }

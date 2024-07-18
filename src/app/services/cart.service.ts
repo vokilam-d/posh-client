@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { IProduct } from '../interfaces/product.interface';
 import { ICartItem } from '../interfaces/cart-item.interface';
 
@@ -7,8 +7,9 @@ import { ICartItem } from '../interfaces/cart-item.interface';
 })
 export class CartService {
 
-  private _cartItems = signal<ICartItem[]>([]);
+  private _cartItems = signal<ICartItem[]>([], { equal: (a, b) => this.getTotalCost(a) === this.getTotalCost(b) });
   cartItems = this._cartItems.asReadonly();
+  totalCost = computed(() => this.cartItems().reduce((acc, item) => acc + (item.price * item.qty), 0));
 
   constructor() { }
 
@@ -18,6 +19,8 @@ export class CartService {
     }
 
     this._cartItems.update(cartItems => {
+      cartItems = structuredClone(cartItems);
+
       const existingCartItem = cartItems.find(cartItem => cartItem.productId === product.id);
       if (existingCartItem) {
         existingCartItem.qty += 1;
@@ -26,6 +29,7 @@ export class CartService {
           productId: product.id,
           productName: product.name,
           qty: 1,
+          price: product.price as number,
         });
       }
 
@@ -35,12 +39,16 @@ export class CartService {
 
   removeFromCart(cartItemIndex: number): void {
     this._cartItems.update(cartItems => {
+      cartItems = structuredClone(cartItems);
+
       return cartItems.splice(cartItemIndex, 1);
     });
   }
 
   incrementQty(cartItemIndex: number): void {
     this._cartItems.update(cartItems => {
+      cartItems = structuredClone(cartItems);
+
       const existingCartItem = cartItems[cartItemIndex];
       if (existingCartItem) {
         existingCartItem.qty +=  1;
@@ -52,6 +60,8 @@ export class CartService {
 
   decrementQty(cartItemIndex: number): void {
     this._cartItems.update(cartItems => {
+      cartItems = structuredClone(cartItems);
+
       const existingCartItem = cartItems[cartItemIndex];
       if (existingCartItem) {
         existingCartItem.qty -=  1;
@@ -63,5 +73,9 @@ export class CartService {
 
       return cartItems;
     });
+  }
+
+  private getTotalCost(cartItems: ICartItem[]): number {
+    return cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0);
   }
 }

@@ -17,7 +17,6 @@ export class CategoryComponent {
 
   products = computed(() => {
     const categoryId = this.categoryId();
-    console.log('products = computed()', categoryId);
     return this.productsService.products().filter(product => {
       if (!categoryId) {
         return !product.parentCategoryId;

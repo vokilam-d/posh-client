@@ -1,10 +1,13 @@
 .product {
   width: 100px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background: #fff;
   border: 1px solid #666;
-  height: 100%;
+  user-select: none;
+  text-align: left;
+  align-items: initial;
 
   &__photo {
     height: 50px;
