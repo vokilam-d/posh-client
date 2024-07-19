@@ -1,0 +1,12 @@
+@if (url()) {
+  <img
+    class="img"
+    [ngSrc]="url()"
+    fill
+    [alt]="name()"
+  >
+} @else {
+  <div class="img-placeholder">
+    {{ nameAbbr() | uppercase }}
+  </div>
+}

@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CategoryComponent } from './components/category/category.component';
-import { ProductsService } from './services/products.service';
+import { ProductService } from './services/product.service';
+import { CategoryService } from './services/category.service';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +13,11 @@ import { ProductsService } from './services/products.service';
 })
 export class AppComponent {
 
-  productsService = inject(ProductsService);
+  private productsService = inject(ProductService);
+  private categoryService = inject(CategoryService);
 
   constructor() {
     this.productsService.fetchProducts();
+    this.categoryService.fetchCategories();
   }
 }

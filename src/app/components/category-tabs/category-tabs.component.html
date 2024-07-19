@@ -1,1 +1,16 @@
-<p>category-tabs works!</p>
+<div class="tabs">
+  @for (categoriesRow of categoriesRows(); track categoriesRow) {
+    <div class="tabs__row">
+      @for (category of categoriesRow; track category.id) {
+        <a
+          class="tabs__tab"
+          [routerLink]="getRouterLinkCommands(category)"
+          [routerLinkActive]="'tabs__tab--active'"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          {{ category.name }}
+        </a>
+      }
+    </div>
+  }
+</div>

@@ -1,8 +1,7 @@
 export interface IProduct {
   id: string;
-  parentCategoryId: string | null;
+  categoryId: string | null;
   name: string;
-  price: number | null;
-  isCategory: boolean;
-  photoUrl: string | null;
+  price: number;
+  photoUrl?: string | null;
 }

@@ -32,9 +32,19 @@ input {
   }
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.material-symbols-outlined {
+  color: inherit;
+}
+
 :root {
   --accent: #00bc00;
-  --accent-active: #00aa00;
+  //--accent: #0078d4; // blue
+  --accent-active: lch(from var(--accent) calc(l - 10) c h);
   --accent-disabled: #ccc;
 
   --accent-text-color: #fff;
