@@ -6,11 +6,13 @@
 
   &__cart {
     width: 30%;
+    min-width: 330px;
     flex-shrink: 0;
   }
 
   &__products {
     flex-grow: 2;
+    min-width: 0;
     background: #eee;
   }
 }

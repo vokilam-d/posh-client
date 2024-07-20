@@ -1,9 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { IProduct } from '../../interfaces/product.interface';
-import { ProductService } from '../../services/product.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CategoryService } from '../../services/category.service';
 import { ICategory } from '../../interfaces/category.interface';
+import { ImgComponent } from '../img/img.component';
 
 @Component({
   selector: 'app-category-tabs',
@@ -11,6 +10,7 @@ import { ICategory } from '../../interfaces/category.interface';
   imports: [
     RouterLink,
     RouterLinkActive,
+    ImgComponent,
   ],
   templateUrl: './category-tabs.component.html',
   styleUrl: './category-tabs.component.scss'
@@ -18,25 +18,6 @@ import { ICategory } from '../../interfaces/category.interface';
 export class CategoryTabsComponent {
   categoryId = input<string | null>(null);
 
-  // parentCategoriesRows = computed<IProduct[][]>(() => {
-  //   let categoryId = this.categoryId();
-  //   if (!categoryId) {
-  //     return [];
-  //   }
-  //
-  //   const parentCategoriesRows = [];
-  //   //
-  //   // while (categoryId) {
-  //   //   const category = this.productsService.getProductById(categoryId);
-  //   //   parentCategoriesRows.unshift(this.getSiblingCategories(category));
-  //   //
-  //   //   categoryId = category.categoryId;
-  //   // }
-  //
-  //   return parentCategoriesRows;
-  // });
-
-  private productsService = inject(ProductService);
   private categoryService = inject(CategoryService);
 
   categoriesRows = computed<ICategory[][]>(() => {
@@ -66,12 +47,6 @@ export class CategoryTabsComponent {
 
     return categoriesRows;
   });
-
-  private getSiblingCategories(productCategory: IProduct) {
-    return this.productsService.products().filter(product => {
-      return product.categoryId === productCategory.categoryId;
-    });
-  }
 
   getRouterLinkCommands(category: ICategory): string[] {
     const commands = ['/', 'pos', 'category'];

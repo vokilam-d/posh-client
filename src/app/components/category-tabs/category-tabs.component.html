@@ -8,7 +8,18 @@
           [routerLinkActive]="'tabs__tab--active'"
           [routerLinkActiveOptions]="{ exact: true }"
         >
-          {{ category.name }}
+
+          <div class="tabs__img">
+            <app-img
+              [name]="category.name"
+              [url]="category.photoUrl"
+              [withColor]="false"
+            ></app-img>
+          </div>
+
+          <div class="tabs__name">
+            {{ category.name }}
+          </div>
         </a>
       }
     </div>

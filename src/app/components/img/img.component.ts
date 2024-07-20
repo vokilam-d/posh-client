@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, Input, input } from '@angular/core';
 import { NgOptimizedImage, UpperCasePipe } from '@angular/common';
 
 @Component({
@@ -14,6 +14,7 @@ import { NgOptimizedImage, UpperCasePipe } from '@angular/common';
 export class ImgComponent {
   url = input<string | null>(null);
   name = input<string>('');
+  withColor = input<boolean>(true);
 
   nameAbbr = computed<string>(() => {
     const nameParts = this.name().split(' ');
@@ -28,7 +29,7 @@ export class ImgComponent {
   });
 
   backgroundColor = computed<string>(() => {
-    return this.getColor(this.hashStr(this.name()));
+    return this.withColor() ? this.getColor(this.hashStr(this.name())) : 'transparent';
   });
 
   private hashStr(str: string): number {
