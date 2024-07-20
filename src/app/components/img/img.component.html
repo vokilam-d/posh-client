@@ -6,7 +6,7 @@
     [alt]="name()"
   >
 } @else {
-  <div class="img-placeholder">
+  <div class="img-placeholder" [style.background-color]="backgroundColor()">
     {{ nameAbbr() | uppercase }}
   </div>
 }

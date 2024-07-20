@@ -26,4 +26,25 @@ export class ImgComponent {
       .map(namePart => namePart[0])
       .join('');
   });
+
+  backgroundColor = computed<string>(() => {
+    return this.getColor(this.hashStr(this.name()));
+  });
+
+  private hashStr(str: string): number {
+    let hash = 0;
+    if (str.length === 0) return hash;
+    for (let i = 0; i < str.length; i++) {
+      const chr = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  }
+
+  private getColor(num: number): string {
+    const hue = num * 137.508; // use golden angle approximation
+    return `hsl(${hue},50%,75%)`;
+  }
 }
+

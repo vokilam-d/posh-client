@@ -56,14 +56,14 @@ export class ProductService {
       },
       {
         id: '9',
-        categoryId: '5',
+        categoryId: '4',
         name: 'Тарт з лимоном',
         price: 90,
         photoUrl: null,
       },
       {
         id: '10',
-        categoryId: '5',
+        categoryId: '4',
         name: 'Тарт з лохиною',
         price: 91,
         photoUrl: null,

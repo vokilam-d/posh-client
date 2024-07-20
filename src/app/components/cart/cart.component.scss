@@ -7,9 +7,9 @@
 
   &__buy {
     width: 100%;
-    padding: 12px 16px;
-    border-radius: 2px;
+    padding: 18px 24px;
     background: var(--accent);
+    border-radius: 100px;
     color: var(--accent-text-color);
     font-size: 18px;
     font-weight: 600;
@@ -68,6 +68,7 @@
     font-size: 32px;
     font-weight: 300;
     color: #444;
+    user-select: none;
   }
 
   &__cost {

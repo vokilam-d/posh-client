@@ -32,11 +32,6 @@ export class CategoryService {
         parentCategoryId: null,
         name: 'Полка',
       },
-      {
-        id: '5',
-        parentCategoryId: null,
-        name: 'Тарти',
-      },
     ]);
   }
 
