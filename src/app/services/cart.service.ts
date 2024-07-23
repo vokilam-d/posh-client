@@ -9,25 +9,28 @@ import { PaymentType } from '../enums/payment-type.enum';
 })
 export class CartService {
 
-  private persistedCartKey = `pos-cart`;
+  private persistedCartsKey = `pos-carts`;
 
-  private _cart = signal<ICart>(this.buildEmptyCart());
-  paymentType = computed(() => this._cart().paymentType)
-  cartItems = computed(() => this._cart().items)
+  private _carts = signal<ICart[]>([this.buildEmptyCart()]);
+  carts = this._carts.asReadonly();
+  currentCartIndex = signal<number>(0);
+
+  paymentType = computed(() => this._carts()[this.currentCartIndex()].paymentType);
+  cartItems = computed(() => this._carts()[this.currentCartIndex()].items);
   totalCost = computed(() => this.cartItems().reduce((acc, item) => acc + this.calcItemCost(item), 0));
 
   buy$ = new EventEmitter<void>();
 
   constructor() {
-    const persistedCart = this.getPersistedCart();
-    this._cart.set(persistedCart);
+    this._carts.set(this.getPersistedCarts());
 
-    effect(() => this.persistCart(this._cart()));
+    effect(() => this.persistCarts(this._carts()));
   }
 
   addToCart(product: IProduct, selectedOptions: ISelectedOption[] = []): void {
-    this._cart.update(cart => {
-      cart = structuredClone(cart);
+    this._carts.update(carts => {
+      carts = structuredClone(carts);
+      const cart = carts[this.currentCartIndex()];
 
       const existingCartItem = cart.items.find(cartItem => {
         return cartItem.productId === product.id
@@ -45,35 +48,38 @@ export class CartService {
         });
       }
 
-      return cart;
+      return carts;
     });
   }
 
   removeFromCart(cartItemIndex: number): void {
-    this._cart.update(cart => {
-      cart = structuredClone(cart);
+    this._carts.update(carts => {
+      carts = structuredClone(carts);
+      const cart = carts[this.currentCartIndex()];
 
       cart.items.splice(cartItemIndex, 1);
-      return cart;
+      return carts;
     });
   }
 
   incrementQty(cartItemIndex: number): void {
-    this._cart.update(cart => {
-      cart = structuredClone(cart);
+    this._carts.update(carts => {
+      carts = structuredClone(carts);
+      const cart = carts[this.currentCartIndex()];
 
       const existingCartItem = cart.items[cartItemIndex];
       if (existingCartItem) {
         existingCartItem.qty += 1;
       }
 
-      return cart;
+      return carts;
     });
   }
 
   decrementQty(cartItemIndex: number): void {
-    this._cart.update(cart => {
-      cart = structuredClone(cart);
+    this._carts.update(carts => {
+      carts = structuredClone(carts);
+      const cart = carts[this.currentCartIndex()];
 
       const existingCartItem = cart.items[cartItemIndex];
       if (existingCartItem) {
@@ -84,12 +90,12 @@ export class CartService {
         cart.items.splice(cartItemIndex, 1);
       }
 
-      return cart;
+      return carts;
     });
   }
 
   onQtyManualChange(): void {
-    this._cart.update(cart => structuredClone(cart));
+    this._carts.update(carts => structuredClone(carts));
   }
 
   calcItemPrice(cartItem: ICartItem): number {
@@ -103,25 +109,67 @@ export class CartService {
   }
 
   setPaymentType(paymentType: PaymentType): void {
-    this._cart.update(cart => {
-      cart = structuredClone(cart);
+    this._carts.update(carts => {
+      carts = structuredClone(carts);
+      const cart = carts[this.currentCartIndex()];
       cart.paymentType = paymentType;
-      return cart;
+      return carts;
     });
   }
 
   buy(): void {
     this.buy$.next();
-    this._cart.set(this.buildEmptyCart());
+    this.deleteCart(this.currentCartIndex());
   }
 
-  private persistCart(cart: ICart): void {
-    localStorage.setItem(this.persistedCartKey, JSON.stringify(cart));
+  selectCart(cartIndex: number): void {
+    this.currentCartIndex.set(cartIndex);
   }
 
-  private getPersistedCart(): ICart {
-    const persistedCart = localStorage.getItem(this.persistedCartKey);
-    return persistedCart ? JSON.parse(persistedCart) : this.buildEmptyCart();
+  createNewCart(): void {
+    const existingEmptyCart = this._carts().find(cart => !cart.items.length);
+    if (existingEmptyCart) {
+      alert(`Вже є пусте замовлення`);
+      return;
+    }
+
+    this._carts.update(carts => {
+      carts = structuredClone(carts);
+      carts.push(this.buildEmptyCart());
+
+      this.currentCartIndex.set(carts.length - 1);
+
+      return carts;
+    });
+  }
+
+  deleteCart(cartIndex: number): void {
+    this._carts.update(carts => {
+      carts = structuredClone(carts);
+
+      carts.splice(cartIndex, 1);
+
+      if (carts.length === 0) {
+        carts.push(this.buildEmptyCart());
+      }
+
+      let currentCartIndex = this.currentCartIndex();
+      while (currentCartIndex > carts.length - 1) {
+        currentCartIndex -= 1;
+      }
+      this.currentCartIndex.set(currentCartIndex);
+
+      return carts;
+    });
+  }
+
+  private persistCarts(carts: ICart[]): void {
+    localStorage.setItem(this.persistedCartsKey, JSON.stringify(carts));
+  }
+
+  private getPersistedCarts(): ICart[] {
+    const persistedCarts = localStorage.getItem(this.persistedCartsKey);
+    return persistedCarts ? JSON.parse(persistedCarts) : [this.buildEmptyCart()];
   }
 
   private isSelectedOptionsSame(selectedOptions1: ISelectedOption[], selectedOptions2: ISelectedOption[]): boolean {
@@ -140,6 +188,7 @@ export class CartService {
     return {
       paymentType: null,
       items: [],
+      createdAtIso: new Date().toISOString(),
     };
   }
 }

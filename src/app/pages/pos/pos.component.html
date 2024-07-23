@@ -1,9 +1,48 @@
-<div class="page">
-  <div class="page__products">
+<div class="pos">
+  <div class="pos__products">
     <router-outlet></router-outlet>
   </div>
 
-  <div class="page__cart">
-    <app-cart></app-cart>
+  <div class="pos__sidebar">
+    <div class="pos__header">
+      <div class="pos__cart-tabs">
+        @for (cart of cartService.carts(); track cart.createdAtIso) {
+          <div
+            class="pos__cart-tab cart-tab"
+            [class.cart-tab--active]="cartService.currentCartIndex() === $index"
+          >
+            <button
+              class="cart-tab__name"
+              (click)="cartService.selectCart($index)"
+            >
+              {{ cart.createdAtIso | date: 'HH:mm' }}
+            </button>
+
+            <button
+              class="cart-tab__close material-symbols-outlined"
+              (click)="deleteCart(cart, $index)"
+            >
+              delete
+            </button>
+          </div>
+        }
+
+        <button
+          class="pos__add-cart-tab material-symbols-outlined"
+          (click)="cartService.createNewCart()"
+        >
+          add
+        </button>
+      </div>
+
+      <a
+        class="pos__admin material-symbols-outlined"
+        routerLink="/admin"
+      >manage_accounts</a>
+    </div>
+
+    <div class="pos__cart">
+      <app-cart></app-cart>
+    </div>
   </div>
 </div>
