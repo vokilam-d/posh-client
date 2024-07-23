@@ -1,0 +1,19 @@
+.btn {
+  padding: 18px 24px;
+  background: var(--accent);
+  border-radius: 100px;
+  color: var(--accent-text-color);
+  font-size: 18px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+
+  &:hover:not([disabled]),
+  &:active:not([disabled]) {
+    background: var(--accent-active);
+  }
+
+  &[disabled] {
+    background: var(--accent-disabled);
+    color: var(--accent-text-color-disabled);
+  }
+}

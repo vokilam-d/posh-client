@@ -1,0 +1,70 @@
+<div class="calc">
+  <div class="calc__numpad">
+    <div class="calc__suggestions">
+      @for (suggestion of suggestions; track suggestion) {
+        <button
+          class="calc__suggestion"
+          (click)="onSuggestionClick(suggestion)"
+        >
+          {{ suggestion }} ₴
+        </button>
+      }
+    </div>
+
+    <div class="calc__numpad-rows">
+      @for (numpadRow of numpadRows; track numpadRow) {
+        <div class="calc__numpad-row">
+          @for (numpadButton of numpadRow; track numpadButton) {
+            <button
+              class="calc__numpad-button"
+              (click)="onNumpadClick(numpadButton)"
+            >
+              @if (isCustomNumpadButton(numpadButton)) {
+                @switch (numpadButton) {
+                  @case (numpadButtonEnum.Dot) {
+                    ,
+                  }
+                  @case (numpadButtonEnum.Remove) {
+                    <span class="material-symbols-outlined">
+                    backspace
+                  </span>
+                  }
+                }
+              } @else {
+                {{ numpadButton }}
+              }
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="calc__content">
+    <button
+      class="calc__close material-symbols-outlined"
+      (click)="dialogRef.close()"
+    >close</button>
+
+    <div class="calc__row">
+      Разом <div class="calc__row-value">{{ cartService.totalCost() }} ₴</div>
+    </div>
+
+    <div class="calc__row">
+      Готівка <div class="calc__row-value">{{ cashAmount }} ₴</div>
+    </div>
+
+    <div class="calc__row">
+      Решта <div class="calc__row-value">{{ calcChange() }} ₴</div>
+    </div>
+
+    <button
+      class="btn calc__buy"
+      (click)="buy()"
+      [disabled]="calcChange() < 0"
+    >
+      Розрахувати - {{ cartService.totalCost() }} ₴
+    </button>
+
+  </div>
+</div>

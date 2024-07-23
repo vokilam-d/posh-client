@@ -1,39 +1,42 @@
 import { computed, effect, EventEmitter, Injectable, signal } from '@angular/core';
 import { IProduct } from '../interfaces/product.interface';
 import { ICartItem, ISelectedOption } from '../interfaces/cart-item.interface';
+import { ICart } from '../interfaces/cart.interface';
+import { PaymentType } from '../enums/payment-type.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
 
-  private persistedCartKey = `cart`;
+  private persistedCartKey = `pos-cart`;
 
-  private _cartItems = signal<ICartItem[]>([]);
-  cartItems = this._cartItems.asReadonly();
+  private _cart = signal<ICart>(this.buildEmptyCart());
+  paymentType = computed(() => this._cart().paymentType)
+  cartItems = computed(() => this._cart().items)
   totalCost = computed(() => this.cartItems().reduce((acc, item) => acc + this.calcItemCost(item), 0));
 
   buy$ = new EventEmitter<void>();
 
   constructor() {
     const persistedCart = this.getPersistedCart();
-    this._cartItems.set(persistedCart);
+    this._cart.set(persistedCart);
 
-    effect(() => this.persistCart(this.cartItems()));
+    effect(() => this.persistCart(this._cart()));
   }
 
   addToCart(product: IProduct, selectedOptions: ISelectedOption[] = []): void {
-    this._cartItems.update(cartItems => {
-      cartItems = structuredClone(cartItems);
+    this._cart.update(cart => {
+      cart = structuredClone(cart);
 
-      const existingCartItem = cartItems.find(cartItem => {
+      const existingCartItem = cart.items.find(cartItem => {
         return cartItem.productId === product.id
           && this.isSelectedOptionsSame(cartItem.selectedOptions, selectedOptions);
       });
       if (existingCartItem) {
         existingCartItem.qty += 1;
       } else {
-        cartItems.push({
+        cart.items.push({
           productId: product.id,
           productName: product.name,
           qty: 1,
@@ -42,46 +45,51 @@ export class CartService {
         });
       }
 
-      return cartItems;
+      return cart;
     });
   }
 
   removeFromCart(cartItemIndex: number): void {
-    this._cartItems.update(cartItems => {
-      cartItems = structuredClone(cartItems);
+    this._cart.update(cart => {
+      cart = structuredClone(cart);
 
-      return cartItems.splice(cartItemIndex, 1);
+      cart.items.splice(cartItemIndex, 1);
+      return cart;
     });
   }
 
   incrementQty(cartItemIndex: number): void {
-    this._cartItems.update(cartItems => {
-      cartItems = structuredClone(cartItems);
+    this._cart.update(cart => {
+      cart = structuredClone(cart);
 
-      const existingCartItem = cartItems[cartItemIndex];
+      const existingCartItem = cart.items[cartItemIndex];
       if (existingCartItem) {
         existingCartItem.qty += 1;
       }
 
-      return cartItems;
+      return cart;
     });
   }
 
   decrementQty(cartItemIndex: number): void {
-    this._cartItems.update(cartItems => {
-      cartItems = structuredClone(cartItems);
+    this._cart.update(cart => {
+      cart = structuredClone(cart);
 
-      const existingCartItem = cartItems[cartItemIndex];
+      const existingCartItem = cart.items[cartItemIndex];
       if (existingCartItem) {
         existingCartItem.qty -= 1;
       }
 
       if (existingCartItem.qty <= 0) {
-        cartItems.splice(cartItemIndex, 1);
+        cart.items.splice(cartItemIndex, 1);
       }
 
-      return cartItems;
+      return cart;
     });
+  }
+
+  onQtyManualChange(): void {
+    this._cart.update(cart => structuredClone(cart));
   }
 
   calcItemPrice(cartItem: ICartItem): number {
@@ -94,18 +102,26 @@ export class CartService {
     return this.calcItemPrice(cartItem) * cartItem.qty;
   }
 
+  setPaymentType(paymentType: PaymentType): void {
+    this._cart.update(cart => {
+      cart = structuredClone(cart);
+      cart.paymentType = paymentType;
+      return cart;
+    });
+  }
+
   buy(): void {
     this.buy$.next();
-    this._cartItems.set([]);
+    this._cart.set(this.buildEmptyCart());
   }
 
-  private persistCart(cartItems: ICartItem[]): void {
-    localStorage.setItem(this.persistedCartKey, JSON.stringify(cartItems));
+  private persistCart(cart: ICart): void {
+    localStorage.setItem(this.persistedCartKey, JSON.stringify(cart));
   }
 
-  private getPersistedCart(): ICartItem[] {
+  private getPersistedCart(): ICart {
     const persistedCart = localStorage.getItem(this.persistedCartKey);
-    return persistedCart ? JSON.parse(persistedCart) : [];
+    return persistedCart ? JSON.parse(persistedCart) : this.buildEmptyCart();
   }
 
   private isSelectedOptionsSame(selectedOptions1: ISelectedOption[], selectedOptions2: ISelectedOption[]): boolean {
@@ -118,5 +134,12 @@ export class CartService {
         return option2.optionId === option1.optionId && option2.optionValueId === option1.optionValueId;
       });
     });
+  }
+
+  private buildEmptyCart(): ICart {
+    return {
+      paymentType: null,
+      items: [],
+    };
   }
 }

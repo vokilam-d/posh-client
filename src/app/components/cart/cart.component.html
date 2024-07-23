@@ -35,6 +35,7 @@
             <input
               class="cart-item__count"
               [(ngModel)]="cartItem.qty"
+              (ngModelChange)="cartService.onQtyManualChange()"
               type="number"
               [min]="0"
             >
@@ -55,11 +56,57 @@
     }
   </div>
 
-  <button
-    class="cart__buy"
-    (click)="cartService.buy()"
-    [disabled]="!cartService.cartItems().length"
-  >
-    Розрахувати @if (cartService.cartItems().length) { - {{ cartService.totalCost() }} ₴ }
-  </button>
+  <div class="cart__payments">
+    @for (paymentTypeKV of paymentTypeEnum | keyvalue; track paymentTypeKV.key) {
+      <div
+        class="cart__payment payment"
+        [class.payment--selected]="cartService.paymentType() === paymentTypeKV.value"
+        (click)="cartService.setPaymentType(paymentTypeKV.value)"
+      >
+        <div class="payment__icon">
+          @switch (paymentTypeKV.value) {
+            @case (paymentTypeEnum.Cash) {
+              💸
+            }
+            @case (paymentTypeEnum.Card) {
+              💳
+            }
+          }
+        </div>
+
+        <div class="payment__name">
+          @switch (paymentTypeKV.value) {
+            @case (paymentTypeEnum.Cash) {
+              Готівка
+            }
+            @case (paymentTypeEnum.Card) {
+              Картка
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="cart__buy-container">
+    <button
+      class="btn cart__buy"
+      [class.cart__buy--with-calculator]="canOpenCashCalculator()"
+      (click)="cartService.buy()"
+      [disabled]="!canBuy()"
+    >
+      Розрахувати @if (cartService.cartItems().length) { - {{ cartService.totalCost() }} ₴ }
+    </button>
+
+    @if (canOpenCashCalculator()) {
+      <button
+        class="btn cart__cash-calculator"
+        (click)="openCashCalculator()"
+      >
+        <span class="material-symbols-outlined">
+          chevron_right
+        </span>
+      </button>
+    }
+  </div>
 </div>

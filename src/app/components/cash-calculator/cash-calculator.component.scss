@@ -1,0 +1,115 @@
+.calc {
+  --buttons-margin: 12px;
+
+  width: 90vw;
+  height: 90vh;
+  display: flex;
+
+  &__numpad {
+    width: 50%;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    background: #eee;
+  }
+
+  &__suggestions {
+    display: flex;
+    height: 20%;
+    flex-shrink: 0;
+  }
+
+  &__suggestion {
+    flex: 1 1 0;
+    margin: 0 0 0 12px;
+    background: #fff;
+    border: 1px solid var(--accent-active);
+    border-radius: 8px;
+    color: var(--accent-active);
+    font-size: 18px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--accent) 15%, #fff);
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &__numpad-rows {
+    margin: 12px 0 0;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__numpad-row {
+    flex: 1 1 0;
+    display: flex;
+    margin: var(--buttons-margin) 0 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__numpad-button {
+    flex: 1 1 0;
+    margin: 0 0 0 var(--buttons-margin);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    font-size: 32px;
+    font-weight: 600;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: #eee;
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &__content {
+    width: 50%;
+    padding: 48px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 24px;
+  }
+
+  &__row {
+    margin: 24px 0 0;
+    padding: 0 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    font-size: 26px;
+    font-weight: 500;
+  }
+
+  &__row-value {
+    font-weight: 700;
+  }
+
+  &__buy {
+    margin: auto 0 0;
+    font-size: 24px;
+  }
+}
+
