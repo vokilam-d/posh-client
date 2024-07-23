@@ -14,8 +14,4 @@ import { FormsModule } from '@angular/forms';
 export class CartComponent {
 
   cartService = inject(CartService);
-
-  buy() {
-    alert('buy');
-  }
 }

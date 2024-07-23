@@ -1,16 +1,54 @@
-<button
+<div
   class="product"
+  [class.product--with-options]="hasOptions()"
   (click)="onClick()"
 >
-  <div class="product__photo">
-    <app-img [url]="product().photoUrl" [name]="product().name"></app-img>
+
+  <div class="product__photo-name">
+    <div class="product__photo">
+      <app-img [url]="product().photoUrl" [name]="product().name"></app-img>
+    </div>
+
+    <div class="product__name-price">
+      <div class="product__name">
+        {{ product().name }}
+      </div>
+
+      <div class="product__price">
+        {{ calcPrice() }} ₴
+      </div>
+    </div>
   </div>
 
-  <div class="product__name">
-    {{ product().name }}
-  </div>
+  @if (hasOptions()) {
+    <div class="product__options">
+      @for (option of product().options; track option.id) {
+        <div class="product__option option">
+          <div class="option__name">
+            {{ option.name }}
+          </div>
 
-  <div class="product__price">
-    {{ product().price }} грн
-  </div>
-</button>
+          <div class="option__values">
+            @for (optionValue of option.values; track optionValue.id) {
+              <div
+                class="option__value"
+                [class.option__value--selected]="selectedOptionsMap.get(option.id) === optionValue.id"
+                (click)="selectOptionValue(option, optionValue)"
+              >
+                {{ optionValue.name }}
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <button
+      class="product__add"
+      [disabled]="!isAllOptionsSelected()"
+      (click)="addToCart()"
+    >
+      Додати
+    </button>
+  }
+</div>

@@ -7,35 +7,49 @@
           {{ cartItem.productName }}
         </div>
 
-        <div class="cart-item__price">
-          {{ cartItem.price }} грн
-        </div>
+        @for (option of cartItem.selectedOptions; track option.optionId) {
+          <div class="cart-item__option">
+            <div class="cart-item__option-name">
+              {{ option.optionName }}
+            </div>
 
-        <div class="cart-item__counter">
-          <button
-            class="cart-item__inc-dec material-symbols-outlined"
-            (click)="cartService.decrementQty(index)"
-          >
-            do_not_disturb_on
-          </button>
+            <div class="cart-item__option-value-name">
+              {{ option.optionValueName }}
+            </div>
+          </div>
+        }
 
-          <input
-            class="cart-item__count"
-            [(ngModel)]="cartItem.qty"
-            type="number"
-            [min]="0"
-          >
+        <div class="cart-item__price-counter">
+          <div class="cart-item__price">
+            {{ cartService.calcItemPrice(cartItem) }} ₴
+          </div>
 
-          <button
-            class="cart-item__inc-dec material-symbols-outlined"
-            (click)="cartService.incrementQty(index)"
-          >
-            add_circle
-          </button>
-        </div>
+          <div class="cart-item__counter">
+            <button
+              class="cart-item__inc-dec material-symbols-outlined"
+              (click)="cartService.decrementQty(index)"
+            >
+              remove
+            </button>
 
-        <div class="cart-item__cost">
-          {{ cartItem.price * cartItem.qty }} грн
+            <input
+              class="cart-item__count"
+              [(ngModel)]="cartItem.qty"
+              type="number"
+              [min]="0"
+            >
+
+            <button
+              class="cart-item__inc-dec material-symbols-outlined"
+              (click)="cartService.incrementQty(index)"
+            >
+              add
+            </button>
+          </div>
+
+          <div class="cart-item__cost">
+            {{ cartService.calcItemCost(cartItem) }} ₴
+          </div>
         </div>
       </div>
     }
@@ -43,9 +57,9 @@
 
   <button
     class="cart__buy"
-    (click)="buy()"
+    (click)="cartService.buy()"
     [disabled]="!cartService.cartItems().length"
   >
-    Розрахувати @if (cartService.cartItems().length) { - {{ cartService.totalCost() }} грн }
+    Розрахувати @if (cartService.cartItems().length) { - {{ cartService.totalCost() }} ₴ }
   </button>
 </div>
