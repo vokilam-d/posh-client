@@ -1,2 +1,19 @@
-<router-outlet></router-outlet>
+<div class="page">
+  <div class="page__navbar navbar">
+    @for (item of navbarItems; track item.route) {
+      <a
+        class="navbar__item"
+        [routerLink]="item.route"
+        routerLinkActive="navbar__item--active"
+      >
+        <span class="navbar__item-icon material-symbols-outlined">{{ item.iconName }}</span>
+      </a>
+    }
+  </div>
+
+  <div class="page__content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
 <span class="material-symbols-outlined hack-to-preload-font">add</span>

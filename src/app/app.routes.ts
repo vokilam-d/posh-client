@@ -26,10 +26,6 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'pos/category/:categoryId',
-    component: PosComponent,
-  },
-  {
     path: '**',
     redirectTo: '',
   }

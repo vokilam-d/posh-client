@@ -1,4 +1,4 @@
-import { Component, computed, Input, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { NgOptimizedImage, UpperCasePipe } from '@angular/common';
 
 @Component({

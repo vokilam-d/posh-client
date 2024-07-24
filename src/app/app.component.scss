@@ -1,3 +1,50 @@
+.page {
+  display: flex;
+
+  &__navbar {
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex-grow: 2;
+  }
+}
+
+.navbar {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+  background: #fff;
+
+  &__item {
+    position: relative;
+    margin: 0 0 12px;
+    padding: 24px;
+    color: #999;
+    transition: all 0.2s ease;
+    overflow: hidden;
+
+    &:not(&--active):hover {
+      color: color-mix(in srgb, var(--accent) 80%, #999);
+    }
+
+    &--active {
+      color: var(--accent);
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -4px;
+        bottom: 0;
+        width: 8px;
+        background: var(--accent);
+        border-radius: 10px 0 0 10px;
+      }
+    }
+  }
+}
+
 .hack-to-preload-font {
   visibility: hidden;
   position: absolute;
