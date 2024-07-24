@@ -1,6 +1,17 @@
 <div class="pos">
-  <div class="pos__products">
-    <router-outlet></router-outlet>
+  <div class="pos__category category">
+    <div class="category__tabs">
+      <app-category-tabs [categoryId]="categoryId()"></app-category-tabs>
+    </div>
+
+    <div class="category__products">
+      @for (product of products(); track product.id) {
+        <app-product
+          class="category__product"
+          [product]="product"
+        ></app-product>
+      }
+    </div>
   </div>
 
   <div class="pos__sidebar">
@@ -34,11 +45,6 @@
           add
         </button>
       </div>
-
-      <a
-        class="pos__admin material-symbols-outlined"
-        routerLink="/admin"
-      >manage_accounts</a>
     </div>
 
     <div class="pos__cart">

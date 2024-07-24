@@ -1,27 +1,43 @@
-import { Component, inject } from '@angular/core';
-import { CategoryComponent } from '../../components/category/category.component';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Component, computed, inject, input } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { CartComponent } from '../../components/cart/cart.component';
 import { CartService } from '../../services/cart.service';
 import { DatePipe } from '@angular/common';
 import { ICart } from '../../interfaces/cart.interface';
+import { CategoryTabsComponent } from '../../components/category-tabs/category-tabs.component';
+import { ProductService } from '../../services/product.service';
+import { ProductComponent } from '../../components/product/product.component';
 
 @Component({
   selector: 'app-pos',
   standalone: true,
   imports: [
-    CategoryComponent,
     RouterOutlet,
     CartComponent,
     DatePipe,
-    RouterLink,
+    CategoryTabsComponent,
+    ProductComponent,
   ],
   templateUrl: './pos.component.html',
   styleUrl: './pos.component.scss'
 })
 export class PosComponent {
 
+  categoryId = input<string | null>(null);
+  products = computed(() => {
+    const categoryId = this.categoryId();
+
+    return this.productsService.products().filter(product => {
+      if (!categoryId) {
+        return true;
+      } else {
+        return product.categoryId === categoryId;
+      }
+    });
+  });
+
   readonly cartService = inject(CartService);
+  private productsService = inject(ProductService);
 
   constructor() {
   }

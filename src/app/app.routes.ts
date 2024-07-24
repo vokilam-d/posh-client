@@ -1,16 +1,14 @@
 import { Routes } from '@angular/router';
-import { CategoryComponent } from './components/category/category.component';
 import { PosComponent } from './pages/pos/pos.component';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'pos',
+    redirectTo: 'pos/category',
   },
   {
     path: 'pos',
-    component: PosComponent,
     children: [
       {
         path: '',
@@ -19,13 +17,17 @@ export const routes: Routes = [
       },
       {
         path: 'category',
-        component: CategoryComponent,
+        component: PosComponent,
       },
       {
         path: 'category/:categoryId',
-        component: CategoryComponent,
+        component: PosComponent,
       },
     ]
+  },
+  {
+    path: 'pos/category/:categoryId',
+    component: PosComponent,
   },
   {
     path: '**',
