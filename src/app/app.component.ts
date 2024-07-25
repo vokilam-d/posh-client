@@ -24,6 +24,6 @@ export class AppComponent {
 
   constructor() {
     this.productService.fetchProducts();
-    this.categoryService.fetchCategories();
+    this.categoryService.cacheCategories();
   }
 }

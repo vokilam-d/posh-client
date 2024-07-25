@@ -15,5 +15,15 @@
   &[disabled] {
     background: var(--accent-disabled);
     color: var(--accent-text-color-disabled);
+    cursor: not-allowed;
+  }
+
+  &--danger {
+    background: var(--error);
+
+    &:hover:not([disabled]),
+    &:active:not([disabled]) {
+      background: lch(from var(--error) calc(l - 10) c h);
+    }
   }
 }

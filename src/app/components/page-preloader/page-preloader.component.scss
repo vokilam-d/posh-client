@@ -1,0 +1,16 @@
+.preloader {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: flyIn 0.2s ease-in-out;
+}
+
+@keyframes flyIn {
+  0% {
+    transform: translate(-50%, 100px);
+  }
+  100% {
+    transform: translate(-50%, 0);
+  }
+}

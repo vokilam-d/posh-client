@@ -1,27 +1,25 @@
 <div class="tabs">
-  @for (categoriesRow of categoriesRows(); track categoriesRow) {
-    <div class="tabs__row">
-      @for (category of categoriesRow; track category.id) {
-        <a
-          class="tabs__tab"
-          [routerLink]="getRouterLinkCommands(category)"
-          [routerLinkActive]="'tabs__tab--active'"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+  <div class="tabs__row">
+    @for (category of categories(); track category.id) {
+      <a
+        class="tabs__tab"
+        [routerLink]="getRouterLinkCommands(category)"
+        [routerLinkActive]="'tabs__tab--active'"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
 
-          <div class="tabs__img">
-            <app-img
-              [name]="category.name"
-              [url]="category.photoUrl"
-              [withColor]="false"
-            ></app-img>
-          </div>
+        <div class="tabs__img">
+          <app-img
+            [name]="category.name"
+            [url]="category.photoUrl"
+            [withColor]="false"
+          ></app-img>
+        </div>
 
-          <div class="tabs__name">
-            {{ category.name }}
-          </div>
-        </a>
-      }
-    </div>
-  }
+        <div class="tabs__name">
+          {{ category.name }}
+        </div>
+      </a>
+    }
+  </div>
 </div>

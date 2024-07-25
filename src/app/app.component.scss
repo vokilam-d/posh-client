@@ -1,5 +1,7 @@
 .page {
   display: flex;
+  height: 100vh;
+  overflow: hidden;
 
   &__navbar {
     flex-shrink: 0;
@@ -7,6 +9,8 @@
 
   &__content {
     flex-grow: 2;
+    min-width: 0;
+    background: #f3f3f3;
   }
 }
 

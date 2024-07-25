@@ -1,0 +1,44 @@
+.page-content {
+  padding: 24px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+
+  &__back {
+    margin: 0 24px 0 0;
+    padding: 12px;
+    font-size: 36px;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  &__title {
+    font-size: 36px;
+    font-weight: 700;
+  }
+
+  &__toolbar {
+    margin: 0 0 0 auto;
+    display: flex;
+    align-items: center;
+
+    ::ng-deep > * {
+      margin-left: 16px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &__main {
+    margin: 24px 0 0;
+  }
+}

@@ -2,7 +2,25 @@
 @import 'reset-css';
 @import "assets/styles/material";
 @import "assets/styles/button";
+@import "assets/styles/toastr";
+@import "assets/styles/form";
 
+:root {
+  --accent: #00bc00;
+  //--accent: #0078d4; // blue
+  --accent-active: lch(from var(--accent) calc(l - 10) c h);
+  --accent-disabled: #ccc;
+
+  --accent-text-color: #fff;
+  --accent-text-color-disabled: #666;
+
+  --success: #52c41a;
+  --warning: #faad14;
+  --error: #ff4d4f;
+  --info: #1677ff;
+
+  --mdc-circular-progress-active-indicator-color: var(--accent);
+}
 
 * {
   box-sizing: border-box;
@@ -24,13 +42,16 @@ input {
   padding: 0;
   background: none;
   border: none;
-  cursor: pointer;
   font: inherit;
 
   &:focus,
   &:active {
     outline: none;
   }
+}
+
+button {
+  cursor: pointer;
 }
 
 a {
@@ -40,14 +61,4 @@ a {
 
 .material-symbols-outlined {
   color: inherit;
-}
-
-:root {
-  --accent: #00bc00;
-  //--accent: #0078d4; // blue
-  --accent-active: lch(from var(--accent) calc(l - 10) c h);
-  --accent-disabled: #ccc;
-
-  --accent-text-color: #fff;
-  --accent-text-color-disabled: #666;
 }

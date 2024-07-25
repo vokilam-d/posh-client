@@ -1,0 +1,31 @@
+<app-page-content>
+  <div page-title>Категорії</div>
+
+  <div
+    class="categories"
+    cdkDropList
+    cdkDropListOrientation="mixed"
+    (cdkDropListDropped)="drop($event)"
+  >
+    @for (category of categories(); track category.id) {
+      <a
+        class="categories__category"
+        [routerLink]="[category.id]"
+        cdkDrag
+      >
+        {{ category.name }}
+      </a>
+    }
+
+    <a
+      class="categories__category categories__category--add"
+      routerLink="add"
+    >
+      Нова категорія
+    </a>
+  </div>
+</app-page-content>
+
+@if (isLoading()) {
+  <app-page-preloader></app-page-preloader>
+}

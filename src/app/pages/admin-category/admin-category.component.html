@@ -1,0 +1,55 @@
+<app-page-content backUrl="..">
+  <div page-title>{{ isNewCategory() ? 'Нова категорія' : category()?.name }}</div>
+
+  @if (!isNewCategory()) {
+    <button
+      class="btn btn--danger"
+      page-toolbar-item
+      [disabled]="!category() || isLoading()"
+      (click)="deleteCategory()"
+    >
+      Видалити
+    </button>
+  }
+
+  <button
+    class="btn"
+    page-toolbar-item
+    [disabled]="!category() || isLoading()"
+    (click)="save()"
+  >
+    Зберегти
+  </button>
+
+
+  @if (form) {
+    <div class="form" [formGroup]="form">
+      <div class="form__row">
+        <div class="form__label">
+          Назва
+        </div>
+
+        <div class="form__input-container">
+          <input
+            class="form__input"
+            formControlName="name"
+            type="text"
+          >
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__label">
+          Фото
+        </div>
+
+        <div class="form__input-container">
+        </div>
+      </div>
+    </div>
+  }
+</app-page-content>
+
+@if (isLoading()) {
+  <app-page-preloader></app-page-preloader>
+}

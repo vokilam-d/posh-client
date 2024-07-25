@@ -1,0 +1,37 @@
+@import 'ngx-toastr/toastr';
+
+.toast-container .ngx-toastr.ngx-toastr {
+  padding-left: 18px;
+  background: #fff;
+  border-width: 0 0 0 4px;
+  border-style: solid;
+  color: #333;
+  transition: box-shadow 0.2s ease;
+  animation: flyInFromBottom 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 12px rgb(0 0 0 / 55%);
+  }
+}
+
+.toast-error {
+  border-color: var(--error);
+}
+.toast-warning {
+  border-color: var(--warning);
+}
+.toast-info {
+  border-color: var(--info);
+}
+.toast-success {
+  border-color: var(--success);
+}
+
+@keyframes flyInFromBottom {
+  from {
+    transform: translateY(100px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
