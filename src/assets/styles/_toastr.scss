@@ -14,6 +14,10 @@
   }
 }
 
+.toast-message {
+  white-space: pre-line;
+}
+
 .toast-error {
   border-color: var(--error);
 }

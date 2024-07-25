@@ -90,7 +90,7 @@ export class AdminCategoryComponent {
             this.category.set(response);
             this.buildForm();
           },
-          error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорію з ID "${this.categoryId()}"`),
+          error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорію`),
         );
     }
   }

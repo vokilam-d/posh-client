@@ -4,10 +4,10 @@
 @import "assets/styles/button";
 @import "assets/styles/toastr";
 @import "assets/styles/form";
+@import "assets/styles/table";
 
 :root {
-  --accent: #00bc00;
-  //--accent: #0078d4; // blue
+  --accent: #00bc00; // #0078d4 - blue
   --accent-active: lch(from var(--accent) calc(l - 10) c h);
   --accent-disabled: #ccc;
 
@@ -19,7 +19,7 @@
   --error: #ff4d4f;
   --info: #1677ff;
 
-  --mdc-circular-progress-active-indicator-color: var(--accent);
+  --font-family: "Nunito Sans", sans-serif;
 }
 
 * {
@@ -27,7 +27,7 @@
 }
 
 html {
-  font-family: "Nunito Sans", sans-serif;
+  font-family: var(--font-family), sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;

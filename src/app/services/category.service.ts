@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { getHttpErrorMessage } from '../utils/get-http-error-message.util';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { CategoryDto } from '../dtos/category.dto';
 import { CreateOrUpdateCategoryDto } from '../dtos/create-or-update-category.dto';
 import { ReorderCategoriesDto, ReorderCategoryDto } from '../dtos/reorder-categories.dto';
@@ -20,15 +20,19 @@ export class CategoryService {
 
   private readonly apiUrl = `${environment.apiUrl}/categories`;
 
+  constructor() {
+    this.cacheCategories();
+  }
+
   cacheCategories(): void {
-    this.fetchCategories().subscribe(
-      response => this.cachedCategories.set(response),
-      error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорії`),
-    );
+    this.fetchCategories().subscribe({
+      next: response => this.cachedCategories.set(response),
+      error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорії`),
+    });
   }
 
   fetchCategories(): Observable<CategoryDto[]> {
-    return this.httpClient.get<CategoryDto[]>(this.apiUrl);
+    return this.httpClient.get<CategoryDto[]>(this.apiUrl)
   }
 
   fetchCategoryById(categoryId: string): Observable<CategoryDto> {
@@ -36,15 +40,18 @@ export class CategoryService {
   }
 
   create(categoryDto: CreateOrUpdateCategoryDto): Observable<CategoryDto> {
-    return this.httpClient.post<CategoryDto>(this.apiUrl, categoryDto);
+    return this.httpClient.post<CategoryDto>(this.apiUrl, categoryDto)
+      .pipe(tap(() => this.cacheCategories()));
   }
 
   update(categoryId: string, categoryDto: CreateOrUpdateCategoryDto): Observable<CategoryDto> {
-    return this.httpClient.put<CategoryDto>(`${this.apiUrl}/${categoryId}`, categoryDto);
+    return this.httpClient.put<CategoryDto>(`${this.apiUrl}/${categoryId}`, categoryDto)
+      .pipe(tap(() => this.cacheCategories()));
   }
 
   deleteCategory(categoryId: string): Observable<CategoryDto> {
-    return this.httpClient.delete<CategoryDto>(`${this.apiUrl}/${categoryId}`);
+    return this.httpClient.delete<CategoryDto>(`${this.apiUrl}/${categoryId}`)
+      .pipe(tap(() => this.cacheCategories()));
   }
 
   reorderCategories(reorderedCategories: ReorderCategoryDto[]): Observable<CategoryDto[]> {
@@ -52,6 +59,7 @@ export class CategoryService {
       categories: reorderedCategories,
     };
 
-    return this.httpClient.post<CategoryDto[]>(`${this.apiUrl}/reorder`, dto);
+    return this.httpClient.post<CategoryDto[]>(`${this.apiUrl}/reorder`, dto)
+      .pipe(tap(response => this.cachedCategories.set(response)));
   }
 }

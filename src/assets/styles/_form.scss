@@ -9,11 +9,15 @@
     &:first-child {
       margin-top: 0;
     }
+
+    &--no-align {
+      align-items: initial;
+    }
   }
 
   &__label {
     flex-shrink: 0;
-    margin: 0 24px 0 0;
+    margin: 8px 24px 0 0;
     font-size: 18px;
   }
 
@@ -23,7 +27,7 @@
 
   &__input {
     width: 100%;
-    padding: 4px 8px;
+    padding: 6px 8px;
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;

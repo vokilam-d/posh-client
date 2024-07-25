@@ -8,7 +8,9 @@ export class ProductService {
 
   products = signal<IProduct[]>([]);
 
-  constructor() { }
+  constructor() {
+    this.fetchProducts();
+  }
 
   fetchProducts(): void {
     this.products.set([

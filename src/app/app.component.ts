@@ -1,7 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ProductService } from './services/product.service';
-import { CategoryService } from './services/category.service';
 
 @Component({
   selector: 'app-root',
@@ -16,14 +14,9 @@ export class AppComponent {
     { route: 'pos', iconName: 'home' },
     { route: 'category', iconName: 'table_chart' },
     { route: 'product', iconName: 'coffee' },
-    { route: 'product-options', iconName: 'tune' },
+    { route: 'product-option', iconName: 'tune' },
   ];
 
-  private productService = inject(ProductService);
-  private categoryService = inject(CategoryService);
-
   constructor() {
-    this.productService.fetchProducts();
-    this.categoryService.cacheCategories();
   }
 }

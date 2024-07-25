@@ -1,0 +1,12 @@
+.table {
+  &__row {
+    &--clickable {
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: color-mix(in srgb, var(--accent) 5%, transparent);
+      }
+    }
+  }
+}
