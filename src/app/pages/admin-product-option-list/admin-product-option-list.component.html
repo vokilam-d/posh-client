@@ -28,6 +28,10 @@
       *matRowDef="let row; columns: displayedColumns;"
       [routerLink]="row.id"
     ></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Немає опцій</td>
+    </tr>
   </table>
 </app-page-content>
 

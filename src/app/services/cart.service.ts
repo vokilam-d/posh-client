@@ -1,8 +1,8 @@
 import { computed, effect, EventEmitter, Injectable, signal } from '@angular/core';
-import { IProduct } from '../interfaces/product.interface';
 import { ICartItem, ISelectedOption } from '../interfaces/cart-item.interface';
 import { ICart } from '../interfaces/cart.interface';
 import { PaymentType } from '../enums/payment-type.enum';
+import { ProductDto } from '../dtos/product.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +27,7 @@ export class CartService {
     effect(() => this.persistCarts(this._carts()));
   }
 
-  addToCart(product: IProduct, selectedOptions: ISelectedOption[] = []): void {
+  addToCart(product: ProductDto, selectedOptions: ISelectedOption[] = []): void {
     this._carts.update(carts => {
       carts = structuredClone(carts);
       const cart = carts[this.currentCartIndex()];

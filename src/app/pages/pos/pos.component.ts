@@ -27,7 +27,7 @@ export class PosComponent {
   products = computed(() => {
     const categoryId = this.categoryId();
 
-    return this.productsService.products().filter(product => {
+    return this.productsService.cachedProducts().filter(product => {
       if (!categoryId) {
         return true;
       } else {

@@ -13,10 +13,15 @@
     &--no-align {
       align-items: initial;
     }
+
+    &--no-border-bottom {
+      border-bottom: none;
+    }
   }
 
   &__label {
     flex-shrink: 0;
+    width: 20%;
     margin: 8px 24px 0 0;
     font-size: 18px;
   }

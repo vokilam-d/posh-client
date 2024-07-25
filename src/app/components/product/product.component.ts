@@ -5,6 +5,7 @@ import { CartService } from '../../services/cart.service';
 import { ImgComponent } from '../img/img.component';
 import { ISelectedOption } from '../../interfaces/cart-item.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProductDto } from '../../dtos/product.dto';
 
 @Component({
   selector: 'app-product',
@@ -18,7 +19,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class ProductComponent {
 
-  product = input.required<IProduct>();
+  product = input.required<ProductDto>();
   hasOptions = computed<boolean>(() => this.product().options.length > 0);
   selectedOptionsMap: Map<string, string> = new Map();
 
@@ -61,26 +62,28 @@ export class ProductComponent {
   }
 
   calcPrice(): number {
-    return this.product().options.reduce(
-      (acc, option) => {
-        const selectedValue = option.values.find(value => value.id === this.selectedOptionsMap.get(option.id));
-        return acc + (selectedValue?.priceDiff ?? 0);
-      },
-      this.product().price,
-    );
+    // return this.product().options.reduce(
+    //   (acc, option) => {
+    //     const selectedValue = option.values.find(value => value.id === this.selectedOptionsMap.get(option.id));
+    //     return acc + (selectedValue?.priceDiff ?? 0);
+    //   },
+    //   this.product().price,
+    // );
+    return this.product().price;
   }
 
   private buildSelectedOptions(): ISelectedOption[] {
-    return this.product().options
-      .map(option => {
-        const selectedValue = option.values.find(value => value.id === this.selectedOptionsMap.get(option.id));
-        return {
-          optionId: option.id,
-          optionName: option.name,
-          optionValueId: selectedValue.id,
-          optionValueName: selectedValue.name,
-          priceDiff: selectedValue.priceDiff,
-        };
-      });
+    return [];
+    // return this.product().options
+    //   .map(option => {
+    //     const selectedValue = option.values.find(value => value.id === this.selectedOptionsMap.get(option.id));
+    //     return {
+    //       optionId: option.id,
+    //       optionName: option.name,
+    //       optionValueId: selectedValue.id,
+    //       optionValueName: selectedValue.name,
+    //       priceDiff: selectedValue.priceDiff,
+    //     };
+    //   });
   }
 }

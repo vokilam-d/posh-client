@@ -1,0 +1,159 @@
+<app-page-content backUrl="..">
+  <div page-title>{{ isNewProduct() ? 'Новий товар' : product()?.name }}</div>
+
+  @if (!isNewProduct()) {
+    <button
+      class="btn btn--danger"
+      page-toolbar-item
+      [disabled]="!product() || isLoading()"
+      (click)="deleteProduct()"
+    >
+      Видалити
+    </button>
+  }
+
+  <button
+    class="btn"
+    page-toolbar-item
+    [disabled]="!product() || isLoading()"
+    (click)="save()"
+  >
+    Зберегти
+  </button>
+
+
+  @if (form) {
+    <div class="form" [formGroup]="form">
+      <div class="form__row">
+        <div class="form__label">
+          Назва
+        </div>
+
+        <div class="form__input-container">
+          <input
+            class="form__input"
+            formControlName="name"
+            type="text"
+          >
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__label">
+          Ціна
+        </div>
+
+        <div class="form__input-container">
+          <input
+            class="form__input"
+            formControlName="price"
+            type="number"
+            min="0"
+          >
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__label">
+          Категорія
+        </div>
+
+        <div class="form__input-container">
+          <mat-form-field class="option__input">
+            <mat-label>Категорія</mat-label>
+
+            <mat-select formControlName="categoryId">
+              @for (category of categoryService.cachedCategories(); track category.id) {
+                <mat-option [value]="category.id">{{ category.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form__row form__row--no-align">
+        <div class="form__label form__label--options">
+          Опції
+        </div>
+
+        <div class="form__input-container">
+          @for (optionGroup of optionsFormArray.controls; track optionGroup) {
+            <div class="form__row" [formGroup]="optionGroup">
+              <div class="form__input-container option">
+                <mat-form-field class="option__input">
+                  <mat-label>Опція</mat-label>
+
+                  <mat-select formControlName="optionId">
+                    @for (option of productOptionService.cachedProductOptions(); track option.id) {
+                      <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="option__input">
+                  <mat-label>Значення</mat-label>
+
+                  <mat-select
+                    formControlName="optionValueId"
+                  >
+                    @for (optionValue of getProductOptionValues(optionGroup.controls.optionId.getRawValue()); track optionValue.id) {
+                      <mat-option [value]="optionValue.id">{{ optionValue.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-checkbox
+                  class="option__input"
+                  formControlName="isPriceDiffOverridden"
+                >
+                  Перезадати ціну?
+                </mat-checkbox>
+
+                <mat-form-field class="option__input">
+                  <mat-label>Різниця ціни</mat-label>
+
+                  <span matTextPrefix>{{ optionGroup.controls.priceDiff.getRawValue() >= 0 ? '+' : '&nbsp;&nbsp;' }}</span>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="priceDiff"
+                  >
+                  <span matTextSuffix>&nbsp;₴</span>
+                </mat-form-field>
+
+                <button
+                  class="option__delete material-symbols-outlined"
+                  (click)="deleteSelectedOption($index)"
+                >delete</button>
+              </div>
+            </div>
+          }
+
+          <div class="form__row form__row--no-border-bottom">
+            <button
+              class="add-new"
+              (click)="addSelectedOption()"
+            >
+              <span class="add-new__icon material-symbols-outlined">add</span>
+
+              Додати нову опцію
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__label">
+          Фото
+        </div>
+
+        <div class="form__input-container">
+        </div>
+      </div>
+    </div>
+  }
+</app-page-content>
+
+@if (isLoading()) {
+  <app-page-preloader></app-page-preloader>
+}

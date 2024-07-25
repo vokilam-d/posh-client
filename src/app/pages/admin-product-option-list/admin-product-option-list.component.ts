@@ -14,7 +14,7 @@ import {
   MatColumnDef,
   MatHeaderCell,
   MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatHeaderRow, MatHeaderRowDef, MatNoDataRow, MatRow, MatRowDef,
   MatTable,
 } from '@angular/material/table';
 import { ProductOptionValueDto } from '../../dtos/product-option-value.dto';
@@ -36,6 +36,7 @@ import { ProductOptionValueDto } from '../../dtos/product-option-value.dto';
     MatRow,
     MatHeaderRowDef,
     MatRowDef,
+    MatNoDataRow,
   ],
   templateUrl: './admin-product-option-list.component.html',
   styleUrl: './admin-product-option-list.component.scss'

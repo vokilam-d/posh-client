@@ -48,6 +48,7 @@ export class AdminCategoryComponent {
 
   save() {
     const dto: CreateOrUpdateCategoryDto = {
+      ...this.category(),
       ...this.form.getRawValue(),
     };
 
@@ -75,11 +76,7 @@ export class AdminCategoryComponent {
     this.categoryId.set(categoryId);
 
     if (this.isNewCategory()) {
-      this.category.set({
-        name: '',
-        photoUrl: null,
-        sortOrder: null,
-      });
+      this.category.set(new CreateOrUpdateCategoryDto());
       this.buildForm();
     } else {
       this.isLoading.set(true);

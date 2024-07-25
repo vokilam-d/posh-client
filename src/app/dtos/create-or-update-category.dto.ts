@@ -1,5 +1,5 @@
 export class CreateOrUpdateCategoryDto {
-  name: string;
-  photoUrl: string;
-  sortOrder: number;
+  name: string = '';
+  photoUrl: string = null;
+  sortOrder: number = null;
 }

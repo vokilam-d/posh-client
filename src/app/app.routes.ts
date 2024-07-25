@@ -4,6 +4,8 @@ import { AdminCategoryListComponent } from './pages/admin-category-list/admin-ca
 import { AdminCategoryComponent } from './pages/admin-category/admin-category.component';
 import { AdminProductOptionListComponent } from './pages/admin-product-option-list/admin-product-option-list.component';
 import { AdminProductOptionComponent } from './pages/admin-product-option/admin-product-option.component';
+import { AdminProductListComponent } from './pages/admin-product-list/admin-product-list.component';
+import { AdminProductComponent } from './pages/admin-product/admin-product.component';
 
 export const routes: Routes = [
   {
@@ -40,6 +42,20 @@ export const routes: Routes = [
       {
         path: ':categoryId',
         component: AdminCategoryComponent,
+      },
+    ]
+  },
+  {
+    path: 'product',
+    children: [
+      {
+        path: '',
+        component: AdminProductListComponent,
+        pathMatch: 'full',
+      },
+      {
+        path: ':productId',
+        component: AdminProductComponent,
       },
     ]
   },

@@ -86,10 +86,7 @@ export class AdminProductOptionComponent {
     this.productOptionId.set(productOptionId);
 
     if (this.isNewProductOption()) {
-      this.productOption.set({
-        name: '',
-        values: [],
-      });
+      this.productOption.set(new CreateOrUpdateProductOptionDto());
       this.buildForm();
     } else {
       this.isLoading.set(true);
@@ -113,7 +110,6 @@ export class AdminProductOptionComponent {
         this.productOption().values.map(value => this.formBuilder.group<ProductOptionValueDto>(value))
       ),
     });
-    console.log(this.form);
   }
 
   deleteProductOption() {

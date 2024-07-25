@@ -1,141 +1,65 @@
-import { Injectable, signal } from '@angular/core';
-import { IProduct, IProductOption } from '../interfaces/product.interface';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
+import { getHttpErrorMessage } from '../utils/get-http-error-message.util';
+import { Observable, tap } from 'rxjs';
+import { ProductDto } from '../dtos/product.dto';
+import { CreateOrUpdateProductDto } from '../dtos/create-or-update-product.dto';
+import { ReorderProductsDto, ReorderProductDto } from '../dtos/reorder-products.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  products = signal<IProduct[]>([]);
+  cachedProducts = signal<ProductDto[]>([]);
+
+  private readonly httpClient = inject(HttpClient);
+  private readonly toastr = inject(ToastrService);
+
+  private readonly apiUrl = `${environment.apiUrl}/products`;
 
   constructor() {
-    this.fetchProducts();
+    this.cacheProducts();
   }
 
-  fetchProducts(): void {
-    this.products.set([
-      {
-        id: '1',
-        categoryId: '1',
-        name: 'Фільтр',
-        price: 50,
-        photoUrl: null,
-        options: [{
-          id: '1',
-          name: 'Розмір',
-          values: [
-            { id: '1', name: 'S (150)', priceDiff: 0 },
-            { id: '2', name: 'M (250)', priceDiff: 10 },
-            { id: '3', name: 'L (350)', priceDiff: 20 },
-          ],
-        }],
-      },
-      {
-        id: '2',
-        categoryId: '2',
-        name: 'Капуч',
-        price: 50,
-        photoUrl: null,
-        options: [
-          {
-            id: '1',
-            name: 'Розмір',
-            values: [
-              { id: '1', name: 'S (150)', priceDiff: 0 },
-              { id: '2', name: 'M (250)', priceDiff: 12 },
-              { id: '3', name: 'L (350)', priceDiff: 24 },
-            ],
-          },
-          {
-            id: '2',
-            name: 'Молоко',
-            values: [
-              { id: '1', name: 'Звичайне', priceDiff: 0 },
-              { id: '2', name: 'Безлактозне', priceDiff: 11 },
-              { id: '3', name: 'Рослинне', priceDiff: 22 },
-            ],
-          },
-        ],
-      },
-      {
-        id: '11',
-        categoryId: '2',
-        name: 'Флет',
-        price: 50,
-        photoUrl: null,
-        options: [
-          {
-            id: '1',
-            name: 'Розмір',
-            values: [
-              { id: '1', name: 'S (150)', priceDiff: 0 },
-              { id: '2', name: 'M (250)', priceDiff: 12 },
-              { id: '3', name: 'L (350)', priceDiff: 24 },
-            ],
-          },
-          {
-            id: '2',
-            name: 'Молоко',
-            values: [
-              { id: '1', name: 'Звичайне', priceDiff: 0 },
-              { id: '2', name: 'Безлактозне', priceDiff: 11 },
-              { id: '3', name: 'Рослинне', priceDiff: 22 },
-            ],
-          },
-        ],
-      },
-      {
-        id: '3',
-        categoryId: '2',
-        name: 'Капуч на безлактозном',
-        price: 60,
-        photoUrl: null,
-        options: [],
-      },
-      {
-        id: '4',
-        categoryId: '2',
-        name: 'Капуч на рослинном',
-        price: 70,
-        photoUrl: null,
-        options: [],
-      },
-      {
-        id: '6',
-        categoryId: '4',
-        name: 'Печиво з фініком',
-        price: 15,
-        photoUrl: null,
-        options: [],
-      },
-      {
-        id: '7',
-        categoryId: '3',
-        name: 'Колдбрю',
-        price: 35,
-        photoUrl: null,
-        options: [],
-      },
-      {
-        id: '9',
-        categoryId: '4',
-        name: 'Тарт з лимоном',
-        price: 90,
-        photoUrl: null,
-        options: [],
-      },
-      {
-        id: '10',
-        categoryId: '4',
-        name: 'Тарт з лохиною',
-        price: 91,
-        photoUrl: null,
-        options: [],
-      },
-    ]);
+  cacheProducts(): void {
+    this.fetchProducts().subscribe({
+      next: response => this.cachedProducts.set(response),
+      error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорії`),
+    });
   }
 
-  getProductById(productId: string): IProduct {
-    return this.products().find(product => product.id === productId) as IProduct;
+  fetchProducts(): Observable<ProductDto[]> {
+    return this.httpClient.get<ProductDto[]>(this.apiUrl)
+  }
+
+  fetchProductById(productId: string): Observable<ProductDto> {
+    return this.httpClient.get<ProductDto>(`${this.apiUrl}/${productId}`);
+  }
+
+  create(productDto: CreateOrUpdateProductDto): Observable<ProductDto> {
+    return this.httpClient.post<ProductDto>(this.apiUrl, productDto)
+      .pipe(tap(() => this.cacheProducts()));
+  }
+
+  update(productId: string, productDto: CreateOrUpdateProductDto): Observable<ProductDto> {
+    return this.httpClient.put<ProductDto>(`${this.apiUrl}/${productId}`, productDto)
+      .pipe(tap(() => this.cacheProducts()));
+  }
+
+  deleteProduct(productId: string): Observable<ProductDto> {
+    return this.httpClient.delete<ProductDto>(`${this.apiUrl}/${productId}`)
+      .pipe(tap(() => this.cacheProducts()));
+  }
+
+  reorderProducts(reorderedProducts: ReorderProductDto[]): Observable<ProductDto[]> {
+    const dto: ReorderProductsDto = {
+      products: reorderedProducts,
+    };
+
+    return this.httpClient.post<ProductDto[]>(`${this.apiUrl}/reorder`, dto)
+      .pipe(tap(response => this.cachedProducts.set(response)));
   }
 }

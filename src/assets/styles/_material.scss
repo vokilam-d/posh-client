@@ -1,6 +1,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
+@use 'sass:map';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -8,17 +9,38 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
+$posh-palette: map.merge(
+    mat.$azure-palette,
+    (
+      10: lch(from var(--accent) calc(l - 60) c h),
+      20: lch(from var(--accent) calc(l - 50) c h),
+      25: lch(from var(--accent) calc(l - 40) c h),
+      30: lch(from var(--accent) calc(l - 30) c h),
+      35: lch(from var(--accent) calc(l - 20) c h),
+      40: lch(from var(--accent) calc(l - 10) c h),
+      50: lch(from var(--accent) calc(l - 0) c h),
+      60: lch(from var(--accent) calc(l + 10) c h),
+      70: lch(from var(--accent) calc(l + 20) c h),
+      80: lch(from var(--accent) calc(l + 30) c h),
+      90: lch(from var(--accent) calc(l + 40) c h),
+      95: lch(from var(--accent) calc(l + 50) c h),
+      98: lch(from var(--accent) calc(l + 60) c h),
+      99: lch(from var(--accent) calc(l + 70) c h),
+    ),
+);
+
 // Define the theme object.
 $pos-client-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$azure-palette,
+    primary: $posh-palette,
     tertiary: mat.$blue-palette,
   ),
   density: (
     scale: 0,
   )
 ));
+
 
 $pos-typography: mat.define-typography((
   plain-family: var(--font-family)
@@ -40,12 +62,12 @@ $pos-typography: mat.define-typography((
   --mat-table-row-item-label-text-size: 16px;
   --mat-table-row-item-outline-color: #ccc;
 
-  --mdc-circular-progress-active-indicator-color: var(--accent);
-  --mat-form-field-state-layer-color: var(--accent);
+  //--mdc-circular-progress-active-indicator-color: var(--accent);
+  //--mat-form-field-state-layer-color: var(--accent);
 
   --mdc-filled-text-field-container-color: #fff;
-  --mdc-filled-text-field-focus-active-indicator-color: var(--accent-active);
-  --mdc-filled-text-field-focus-label-text-color: var(--accent-active);
+  //--mdc-filled-text-field-focus-active-indicator-color: var(--accent-active);
+  //--mdc-filled-text-field-focus-label-text-color: var(--accent-active);
 }
 
 .mat-mdc-form-field-focus-overlay {
@@ -60,6 +82,17 @@ $pos-typography: mat.define-typography((
 .mat-mdc-form-field {
   position: relative;
   top: 10px;
+}
+
+.mat-mdc-no-data-row {
+  text-align: center;
+
+  .mat-cell {
+    padding: 24px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #999;
+  }
 }
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.

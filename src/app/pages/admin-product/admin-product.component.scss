@@ -1,0 +1,59 @@
+.form {
+  margin: 0 auto;
+
+  &__label {
+    &--options {
+      margin-top: 8px;
+    }
+  }
+}
+
+.values-container {
+  margin: 16px 0 0;
+
+  &__values {
+    margin: 16px 0 0 64px;
+  }
+}
+
+.option {
+  display: flex;
+  align-items: center;
+
+  &__input {
+    margin: 0 0 0 16px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &__delete {
+    margin: 0 0 0 16px;
+    transition: color 0.2s ease;
+    font-weight: 300;
+
+    &:hover {
+      color: var(--error);
+    }
+  }
+}
+
+.add-new {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #f3f3f3;
+  }
+
+  &__icon {
+    margin: 0 6px 0 0;
+    font-weight: 300;
+  }
+}

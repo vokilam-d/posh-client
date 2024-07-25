@@ -31,6 +31,10 @@ export class CategoryService {
     });
   }
 
+  getCategoryName(categoryId: string): string {
+    return this.cachedCategories().find(category => category.id === categoryId)?.name;
+  }
+
   fetchCategories(): Observable<CategoryDto[]> {
     return this.httpClient.get<CategoryDto[]>(this.apiUrl)
   }
