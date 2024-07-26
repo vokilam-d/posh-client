@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { RouterLink } from '@angular/router';
 import { PageContentComponent } from '../../components/page-content/page-content.component';
-import { PagePreloaderComponent } from '../../components/page-preloader/page-preloader.component';
+import { PreloaderComponent } from '../../components/page-preloader/preloader.component';
 import { finalize } from 'rxjs';
 import { ProductDto } from '../../dtos/product.dto';
 import { getHttpErrorMessage } from '../../utils/get-http-error-message.util';
@@ -22,6 +22,7 @@ import {
 import { SelectedProductOptionDto } from '../../dtos/selected-product-option.dto';
 import { ProductOptionService } from '../../services/product-option.service';
 import { CategoryService } from '../../services/category.service';
+import { buildPhotoUrl } from '../../utils/build-photo-url.util';
 
 @Component({
   selector: 'app-admin-product-list',
@@ -29,7 +30,7 @@ import { CategoryService } from '../../services/category.service';
   imports: [
     RouterLink,
     PageContentComponent,
-    PagePreloaderComponent,
+    PreloaderComponent,
     MatTable,
     MatColumnDef,
     MatHeaderCell,
@@ -54,7 +55,7 @@ export class AdminProductListComponent implements OnInit {
 
   isLoading = signal<boolean>(false);
   products = signal<ProductDto[]>([]);
-  displayedColumns: (keyof ProductDto)[] = ['name', 'categoryId', 'options'];
+  displayedColumns: (keyof ProductDto)[] = ['photoUrl', 'name', 'price', 'categoryId', 'options'];
 
   ngOnInit() {
     this.fetchProducts();
@@ -74,4 +75,6 @@ export class AdminProductListComponent implements OnInit {
   getOptionsNames(options: SelectedProductOptionDto[]): string {
     return options?.map(option => this.productOptionService.getProductOptionName(option.optionId)).join(', ');
   }
+
+  protected readonly buildPhotoUrl = buildPhotoUrl;
 }

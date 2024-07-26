@@ -26,7 +26,7 @@
 
           <div class="cart-item__counter">
             <button
-              class="cart-item__inc-dec material-symbols-outlined"
+              class="cart-item__inc-dec material-symbols-rounded"
               (click)="cartService.decrementQty(index)"
             >
               remove
@@ -41,7 +41,7 @@
             >
 
             <button
-              class="cart-item__inc-dec material-symbols-outlined"
+              class="cart-item__inc-dec material-symbols-rounded"
               (click)="cartService.incrementQty(index)"
             >
               add
@@ -103,7 +103,7 @@
         class="btn cart__cash-calculator"
         (click)="openCashCalculator()"
       >
-        <span class="material-symbols-outlined">
+        <span class="material-symbols-rounded">
           chevron_right
         </span>
       </button>

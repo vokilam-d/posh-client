@@ -71,6 +71,25 @@
         </div>
       </div>
 
+      <div class="form__row">
+        <div class="form__label">
+          Фото
+        </div>
+
+        <div class="form__input-container">
+          @if (form.controls.photoUrl.getRawValue()) {
+            <app-photo-asset
+              [photoUrl]="form.controls.photoUrl.getRawValue()"
+            ></app-photo-asset>
+          } @else {
+            <app-photo-uploader
+              [uploadUrl]="photoUploadUrl"
+              (uploaded)="onPhotoUpload($event)"
+            ></app-photo-uploader>
+          }
+        </div>
+      </div>
+
       <div class="form__row form__row--no-align">
         <div class="form__label form__label--options">
           Опції
@@ -90,7 +109,7 @@
               </mat-form-field>
 
               <button
-                class="option__delete material-symbols-outlined"
+                class="option__delete material-symbols-rounded"
                 (click)="deleteSelectedOption($index)"
               >
                 delete
@@ -143,20 +162,11 @@
               class="add-new"
               (click)="addSelectedOptionForm()"
             >
-              <span class="add-new__icon material-symbols-outlined">add</span>
+              <span class="add-new__icon material-symbols-rounded">add</span>
 
               Додати нову опцію
             </button>
           </div>
-        </div>
-      </div>
-
-      <div class="form__row">
-        <div class="form__label">
-          Фото
-        </div>
-
-        <div class="form__input-container">
         </div>
       </div>
     </div>
@@ -164,5 +174,5 @@
 </app-page-content>
 
 @if (isLoading()) {
-  <app-page-preloader></app-page-preloader>
+  <app-preloader></app-preloader>
 }

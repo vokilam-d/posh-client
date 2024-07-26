@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { getHttpErrorMessage } from '../../utils/get-http-error-message.util';
 import { finalize } from 'rxjs';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { PagePreloaderComponent } from '../../components/page-preloader/page-preloader.component';
+import { PreloaderComponent } from '../../components/page-preloader/preloader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductOptionValueDto } from '../../dtos/product-option-value.dto';
@@ -29,7 +29,7 @@ interface ProductOptionForm {
     PageContentComponent,
     MatProgressSpinner,
     ReactiveFormsModule,
-    PagePreloaderComponent,
+    PreloaderComponent,
     MatFormFieldModule,
     MatInputModule,
   ],

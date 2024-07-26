@@ -3,12 +3,13 @@ import { CategoryService } from '../../services/category.service';
 import { RouterLink } from '@angular/router';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { PageContentComponent } from '../../components/page-content/page-content.component';
-import { PagePreloaderComponent } from '../../components/page-preloader/page-preloader.component';
+import { PreloaderComponent } from '../../components/page-preloader/preloader.component';
 import { finalize } from 'rxjs';
 import { CategoryDto } from '../../dtos/category.dto';
 import { getHttpErrorMessage } from '../../utils/get-http-error-message.util';
 import { ToastrService } from 'ngx-toastr';
 import { ReorderCategoryDto } from '../../dtos/reorder-categories.dto';
+import { buildPhotoUrl } from '../../utils/build-photo-url.util';
 
 @Component({
   selector: 'app-admin-category-list',
@@ -18,7 +19,7 @@ import { ReorderCategoryDto } from '../../dtos/reorder-categories.dto';
     CdkDropList,
     CdkDrag,
     PageContentComponent,
-    PagePreloaderComponent,
+    PreloaderComponent,
   ],
   templateUrl: './admin-category-list.component.html',
   styleUrl: './admin-category-list.component.scss'
@@ -76,4 +77,6 @@ export class AdminCategoryListComponent implements OnInit {
         error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорії`),
       );
   }
+
+  protected readonly buildPhotoUrl = buildPhotoUrl;
 }

@@ -44,6 +44,16 @@
         </div>
 
         <div class="form__input-container">
+          @if (form.controls.photoUrl.getRawValue()) {
+            <app-photo-asset
+              [photoUrl]="form.controls.photoUrl.getRawValue()"
+            ></app-photo-asset>
+          } @else {
+            <app-photo-uploader
+              [uploadUrl]="photoUploadUrl"
+              (uploaded)="onPhotoUpload($event)"
+            ></app-photo-uploader>
+          }
         </div>
       </div>
     </div>
@@ -51,5 +61,5 @@
 </app-page-content>
 
 @if (isLoading()) {
-  <app-page-preloader></app-page-preloader>
+  <app-preloader></app-preloader>
 }

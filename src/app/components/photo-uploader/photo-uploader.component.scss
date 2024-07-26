@@ -1,0 +1,43 @@
+.uploader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: darken(#ccc, 10%);
+  }
+
+  &__icon {
+    display: block;
+    text-align: center;
+    font-size: 52px;
+    color: #999;
+    transition: all 0.2s ease;
+  }
+  &:hover &__icon {
+    color: #333;
+  }
+
+  &__text {
+    display: block;
+    margin: 15px 0 0;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+    transition: all 0.2s ease;
+  }
+  &:hover &__text {
+    color: #333;
+  }
+
+  &__input {
+    display: none;
+  }
+}

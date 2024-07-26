@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { getHttpErrorMessage } from '../../utils/get-http-error-message.util';
 import { finalize, startWith } from 'rxjs';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { PagePreloaderComponent } from '../../components/page-preloader/page-preloader.component';
+import { PreloaderComponent } from '../../components/page-preloader/preloader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,6 +19,9 @@ import { ProductOptionService } from '../../services/product-option.service';
 import { CategoryService } from '../../services/category.service';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { ProductOptionDto } from '../../dtos/product-option.dto';
+import { PhotoAssetComponent } from '../../components/photo-asset/photo-asset.component';
+import { PhotoUploaderComponent } from '../../components/photo-uploader/photo-uploader.component';
+import { environment } from '../../../environments/environment';
 
 interface OptionValueForm {
   isEnabled: FormControl<boolean>;
@@ -48,12 +51,14 @@ interface ProductForm {
     PageContentComponent,
     MatProgressSpinner,
     ReactiveFormsModule,
-    PagePreloaderComponent,
+    PreloaderComponent,
     MatFormFieldModule,
     MatInputModule,
     MatSelect,
     MatOption,
     MatCheckbox,
+    PhotoAssetComponent,
+    PhotoUploaderComponent,
   ],
   templateUrl: './admin-product.component.html',
   styleUrl: './admin-product.component.scss'
@@ -67,6 +72,8 @@ export class AdminProductComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
+
+  readonly photoUploadUrl = `${environment.apiUrl}/products/photo`;
 
   productId = signal<string | null>(null);
   isNewProduct = computed<boolean>(() => this.productId() === 'add');
@@ -264,5 +271,9 @@ export class AdminProductComponent {
 
   deleteSelectedOption(index: number) {
     this.optionsFormArray.removeAt(index);
+  }
+
+  onPhotoUpload(photoUrl: string): void {
+    this.form.controls.photoUrl.setValue(photoUrl);
   }
 }

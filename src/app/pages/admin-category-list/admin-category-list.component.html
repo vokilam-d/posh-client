@@ -13,7 +13,11 @@
         [routerLink]="[category.id]"
         cdkDrag
       >
-        <span class="categories__category-drag-icon material-symbols-outlined">drag_indicator</span>
+        <span class="categories__category-drag-icon material-symbols-rounded">drag_indicator</span>
+
+        @if (category.photoUrl) {
+          <img class="categories__photo" [src]="buildPhotoUrl(category.photoUrl)" alt="">
+        }
 
         {{ category.name }}
       </a>
@@ -23,11 +27,12 @@
       class="categories__category categories__category--add"
       routerLink="add"
     >
+      <span class="categories__photo material-symbols-rounded">add_box</span>
       Нова категорія
     </a>
   </div>
 </app-page-content>
 
 @if (isLoading()) {
-  <app-page-preloader></app-page-preloader>
+  <app-preloader></app-preloader>
 }

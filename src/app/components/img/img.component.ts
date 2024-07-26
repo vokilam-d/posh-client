@@ -1,5 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { NgOptimizedImage, UpperCasePipe } from '@angular/common';
+import { buildPhotoUrl } from '../../utils/build-photo-url.util';
 
 @Component({
   selector: 'app-img',
@@ -15,6 +16,8 @@ export class ImgComponent {
   url = input<string | null>(null);
   name = input<string>('');
   withColor = input<boolean>(true);
+
+  urlResolved = computed(() => buildPhotoUrl(this.url()));
 
   nameAbbr = computed<string>(() => {
     const nameParts = this.name().split(' ');

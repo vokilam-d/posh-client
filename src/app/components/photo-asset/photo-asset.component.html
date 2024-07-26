@@ -1,0 +1,10 @@
+<div class="photo-asset">
+  <button
+    class="photo-asset__delete material-symbols-rounded"
+    (click)="deleted.emit()"
+  >
+    delete
+  </button>
+
+  <img class="photo-asset__img" [src]="photoUrlResolved()" alt="">
+</div>

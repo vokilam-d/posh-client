@@ -1,8 +1,7 @@
 @if (url()) {
   <img
     class="img"
-    [ngSrc]="url()"
-    fill
+    [src]="urlResolved()"
     [alt]="name()"
   >
 } @else {

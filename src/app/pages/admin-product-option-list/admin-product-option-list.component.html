@@ -32,7 +32,7 @@
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell" colspan="4">
         @if (isLoading()) {
-          <app-page-preloader [isFixed]="false"></app-page-preloader>
+          <app-preloader [isFixed]="false"></app-preloader>
         } @else {
           Немає опцій
         }

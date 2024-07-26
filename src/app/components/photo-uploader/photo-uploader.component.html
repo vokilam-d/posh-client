@@ -1,0 +1,16 @@
+<label class="uploader">
+  <span class="uploader__icon material-symbols-rounded">photo_camera</span>
+
+  <span class="uploader__text">Завантажити фото</span>
+
+  <input class="uploader__input"
+         [accept]="acceptTypes"
+         (change)="onInputChange($any($event.target).files)"
+         type="file"
+         #input
+  >
+</label>
+
+@if (isLoading()) {
+  <app-preloader></app-preloader>
+}

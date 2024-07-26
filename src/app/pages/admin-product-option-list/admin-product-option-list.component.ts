@@ -3,7 +3,7 @@ import { ProductOptionService } from '../../services/product-option.service';
 import { RouterLink } from '@angular/router';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { PageContentComponent } from '../../components/page-content/page-content.component';
-import { PagePreloaderComponent } from '../../components/page-preloader/page-preloader.component';
+import { PreloaderComponent } from '../../components/page-preloader/preloader.component';
 import { finalize } from 'rxjs';
 import { ProductOptionDto } from '../../dtos/product-option.dto';
 import { getHttpErrorMessage } from '../../utils/get-http-error-message.util';
@@ -25,7 +25,7 @@ import { ProductOptionValueDto } from '../../dtos/product-option-value.dto';
   imports: [
     RouterLink,
     PageContentComponent,
-    PagePreloaderComponent,
+    PreloaderComponent,
     MatTable,
     MatColumnDef,
     MatHeaderCell,

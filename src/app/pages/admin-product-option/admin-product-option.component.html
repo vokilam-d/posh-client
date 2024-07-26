@@ -62,7 +62,7 @@
                 </mat-form-field>
 
                 <button
-                  class="option-value__delete material-symbols-outlined"
+                  class="option-value__delete material-symbols-rounded"
                   (click)="deleteOptionValue($index)"
                 >delete</button>
               </div>
@@ -74,7 +74,7 @@
               class="add-new"
               (click)="addOptionValue()"
             >
-              <span class="add-new__icon material-symbols-outlined">add</span>
+              <span class="add-new__icon material-symbols-rounded">add</span>
 
               Додати нову опцію
             </button>
@@ -86,5 +86,5 @@
 </app-page-content>
 
 @if (isLoading()) {
-  <app-page-preloader></app-page-preloader>
+  <app-preloader></app-preloader>
 }

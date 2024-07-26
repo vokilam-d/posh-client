@@ -8,9 +8,12 @@ import { ToastrService } from 'ngx-toastr';
 import { getHttpErrorMessage } from '../../utils/get-http-error-message.util';
 import { finalize } from 'rxjs';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { PagePreloaderComponent } from '../../components/page-preloader/page-preloader.component';
+import { PreloaderComponent } from '../../components/page-preloader/preloader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PhotoUploaderComponent } from '../../components/photo-uploader/photo-uploader.component';
+import { environment } from '../../../environments/environment';
+import { PhotoAssetComponent } from '../../components/photo-asset/photo-asset.component';
 
 type CategoryForm = Record<keyof CreateOrUpdateCategoryDto, FormControl>;
 
@@ -21,7 +24,9 @@ type CategoryForm = Record<keyof CreateOrUpdateCategoryDto, FormControl>;
     PageContentComponent,
     MatProgressSpinner,
     ReactiveFormsModule,
-    PagePreloaderComponent,
+    PreloaderComponent,
+    PhotoUploaderComponent,
+    PhotoAssetComponent,
   ],
   templateUrl: './admin-category.component.html',
   styleUrl: './admin-category.component.scss'
@@ -33,6 +38,8 @@ export class AdminCategoryComponent {
   form: FormGroup<CategoryForm>;
   category = signal<CategoryDto | CreateOrUpdateCategoryDto>(null);
   isLoading = signal<boolean>(false);
+
+  readonly photoUploadUrl = `${environment.apiUrl}/categories/photo`;
 
   readonly categoryService = inject(CategoryService);
   private readonly formBuilder = inject(FormBuilder);
@@ -118,5 +125,9 @@ export class AdminCategoryComponent {
         },
         error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося видалити категорію`),
       );
+  }
+
+  onPhotoUpload(photoUrl: string): void {
+    this.form.controls.photoUrl.setValue(photoUrl);
   }
 }
