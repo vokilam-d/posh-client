@@ -30,11 +30,13 @@
     ></tr>
 
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">Немає опцій</td>
+      <td class="mat-cell" colspan="4">
+        @if (isLoading()) {
+          <app-page-preloader [isFixed]="false"></app-page-preloader>
+        } @else {
+          Немає опцій
+        }
+      </td>
     </tr>
   </table>
 </app-page-content>
-
-@if (isLoading()) {
-  <app-page-preloader></app-page-preloader>
-}

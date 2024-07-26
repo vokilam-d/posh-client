@@ -17,8 +17,8 @@
 }
 
 .option {
-  display: flex;
-  align-items: center;
+  padding: 0 0 16px;
+  border-bottom: 1px solid #ccc;;
 
   &__input {
     margin: 0 0 0 16px;
@@ -29,6 +29,8 @@
   }
 
   &__delete {
+    position: relative;
+    top: 8px;
     margin: 0 0 0 16px;
     transition: color 0.2s ease;
     font-weight: 300;

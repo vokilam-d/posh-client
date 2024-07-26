@@ -75,6 +75,7 @@ export class AdminProductOptionComponent {
             this.router.navigate(['..', response.id], { relativeTo: this.route });
           } else {
             this.productOption.set(response);
+            this.buildForm();
           }
           this.toastr.success(`Успішно збережено`);
         },

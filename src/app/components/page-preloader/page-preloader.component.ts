@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
@@ -11,5 +11,5 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   styleUrl: './page-preloader.component.scss'
 })
 export class PagePreloaderComponent {
-
+  isFixed = input<boolean>(true);
 }

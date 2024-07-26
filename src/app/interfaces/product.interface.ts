@@ -10,11 +10,3 @@ export interface IProductOption {
   values: IProductOptionValues[];
 }
 
-export interface IProduct {
-  id: string;
-  categoryId: string | null;
-  name: string;
-  price: number;
-  photoUrl?: string | null;
-  options: IProductOption[];
-}

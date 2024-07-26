@@ -1,6 +1,6 @@
+import { SelectedProductOptionValueDto } from './selected-product-option-value.dto';
+
 export class SelectedProductOptionDto {
-  optionId: string;
-  optionValueId: string;
-  isPriceDiffOverridden: boolean;
-  priceDiff: number;
+  optionId: string = null;
+  optionValues: SelectedProductOptionValueDto[] = [];
 }

@@ -1,4 +1,4 @@
-export interface ISelectedOption {
+export interface ICartItemSelectedOption {
   optionId: string;
   optionName: string;
   optionValueId: string;
@@ -11,5 +11,5 @@ export interface ICartItem {
   productName: string;
   qty: number;
   price: number;
-  selectedOptions: ISelectedOption[];
+  selectedOptions: ICartItemSelectedOption[];
 }

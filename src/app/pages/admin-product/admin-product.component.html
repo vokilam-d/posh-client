@@ -77,62 +77,71 @@
         </div>
 
         <div class="form__input-container">
-          @for (optionGroup of optionsFormArray.controls; track optionGroup) {
-            <div class="form__row" [formGroup]="optionGroup">
-              <div class="form__input-container option">
-                <mat-form-field class="option__input">
-                  <mat-label>Опція</mat-label>
+          @for (optionForm of optionsFormArray.controls; track optionForm) {
+            <div class="option" [formGroup]="optionForm">
+              <mat-form-field class="option__input">
+                <mat-label>Опція</mat-label>
 
-                  <mat-select formControlName="optionId">
-                    @for (option of productOptionService.cachedProductOptions(); track option.id) {
-                      <mat-option [value]="option.id">{{ option.name }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                <mat-select formControlName="optionId">
+                  @for (option of getProductOptionsForDropdown($index); track option.id) {
+                    <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
 
-                <mat-form-field class="option__input">
-                  <mat-label>Значення</mat-label>
+              <button
+                class="option__delete material-symbols-outlined"
+                (click)="deleteSelectedOption($index)"
+              >
+                delete
+              </button>
 
-                  <mat-select
-                    formControlName="optionValueId"
+              @for (optionValueForm of optionForm.controls.optionValues.controls; track optionValueForm) {
+                <div class="option__value" [formGroup]="optionValueForm">
+                  <mat-checkbox
+                    class="option__input"
+                    formControlName="isEnabled"
                   >
-                    @for (optionValue of getProductOptionValues(optionGroup.controls.optionId.getRawValue()); track optionValue.id) {
-                      <mat-option [value]="optionValue.id">{{ optionValue.name }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                    Включити?
+                  </mat-checkbox>
 
-                <mat-checkbox
-                  class="option__input"
-                  formControlName="isPriceDiffOverridden"
-                >
-                  Перезадати ціну?
-                </mat-checkbox>
+                  <mat-form-field class="option__input">
+                    <mat-label>Назва</mat-label>
 
-                <mat-form-field class="option__input">
-                  <mat-label>Різниця ціни</mat-label>
+                    <input
+                      matInput
+                      type="text"
+                      formControlName="name"
+                    >
+                  </mat-form-field>
 
-                  <span matTextPrefix>{{ optionGroup.controls.priceDiff.getRawValue() >= 0 ? '+' : '&nbsp;&nbsp;' }}</span>
-                  <input
-                    matInput
-                    type="number"
-                    formControlName="priceDiff"
+                  <mat-checkbox
+                    class="option__input"
+                    formControlName="isPriceDiffOverridden"
                   >
-                  <span matTextSuffix>&nbsp;₴</span>
-                </mat-form-field>
+                    Перезадати ціну?
+                  </mat-checkbox>
 
-                <button
-                  class="option__delete material-symbols-outlined"
-                  (click)="deleteSelectedOption($index)"
-                >delete</button>
-              </div>
+                  <mat-form-field class="option__input">
+                    <mat-label>Різниця ціни</mat-label>
+
+                    <span matTextPrefix>{{ optionValueForm.controls.priceDiff.getRawValue() >= 0 ? '+' : '&nbsp;&nbsp;' }}</span>
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="priceDiff"
+                    >
+                    <span matTextSuffix>&nbsp;₴</span>
+                  </mat-form-field>
+                </div>
+              }
             </div>
           }
 
           <div class="form__row form__row--no-border-bottom">
             <button
               class="add-new"
-              (click)="addSelectedOption()"
+              (click)="addSelectedOptionForm()"
             >
               <span class="add-new__icon material-symbols-outlined">add</span>
 

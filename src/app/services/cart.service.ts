@@ -1,5 +1,5 @@
 import { computed, effect, EventEmitter, Injectable, signal } from '@angular/core';
-import { ICartItem, ISelectedOption } from '../interfaces/cart-item.interface';
+import { ICartItem, ICartItemSelectedOption } from '../interfaces/cart-item.interface';
 import { ICart } from '../interfaces/cart.interface';
 import { PaymentType } from '../enums/payment-type.enum';
 import { ProductDto } from '../dtos/product.dto';
@@ -27,7 +27,7 @@ export class CartService {
     effect(() => this.persistCarts(this._carts()));
   }
 
-  addToCart(product: ProductDto, selectedOptions: ISelectedOption[] = []): void {
+  addToCart(product: ProductDto, selectedOptions: ICartItemSelectedOption[] = []): void {
     this._carts.update(carts => {
       carts = structuredClone(carts);
       const cart = carts[this.currentCartIndex()];
@@ -172,7 +172,7 @@ export class CartService {
     return persistedCarts ? JSON.parse(persistedCarts) : [this.buildEmptyCart()];
   }
 
-  private isSelectedOptionsSame(selectedOptions1: ISelectedOption[], selectedOptions2: ISelectedOption[]): boolean {
+  private isSelectedOptionsSame(selectedOptions1: ICartItemSelectedOption[], selectedOptions2: ICartItemSelectedOption[]): boolean {
     if (selectedOptions1.length !== selectedOptions2.length) {
       return false;
     }

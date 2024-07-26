@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { PageContentComponent } from '../../components/page-content/page-content.component';
 import { ProductDto } from '../../dtos/product.dto';
@@ -6,7 +6,7 @@ import { CreateOrUpdateProductDto } from '../../dtos/create-or-update-product.dt
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { getHttpErrorMessage } from '../../utils/get-http-error-message.util';
-import { finalize } from 'rxjs';
+import { finalize, startWith } from 'rxjs';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { PagePreloaderComponent } from '../../components/page-preloader/page-preloader.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,25 +17,28 @@ import { SelectedProductOptionDto } from '../../dtos/selected-product-option.dto
 import { MatOption, MatSelect } from '@angular/material/select';
 import { ProductOptionService } from '../../services/product-option.service';
 import { CategoryService } from '../../services/category.service';
-import { ProductOptionValueDto } from '../../dtos/product-option-value.dto';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { ProductOptionDto } from '../../dtos/product-option.dto';
 
-interface SelectedProductOptionForm {
-  optionId: FormControl<string>;
-  optionValueId: FormControl<string>;
+interface OptionValueForm {
+  isEnabled: FormControl<boolean>;
+  id: FormControl<string>;
+  name: FormControl<string>;
   isPriceDiffOverridden: FormControl<boolean>;
   priceDiff: FormControl<number>;
 }
 
+interface OptionForm {
+  optionId: FormControl<string>;
+  optionValues: FormArray<FormGroup<OptionValueForm>>
+}
+
 interface ProductForm {
-  id: FormControl<string>;
   name: FormControl<string>;
   categoryId: FormControl<string>;
   price: FormControl<number>;
   photoUrl: FormControl<string>;
   sortOrder: FormControl<number>;
-  options: FormArray<FormGroup<SelectedProductOptionForm>>;
 }
 
 @Component({
@@ -63,14 +66,15 @@ export class AdminProductComponent {
   private readonly toastr = inject(ToastrService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
   productId = signal<string | null>(null);
   isNewProduct = computed<boolean>(() => this.productId() === 'add');
-
-  form: FormGroup<ProductForm>;
-  get optionsFormArray(): ProductForm['options'] { return this.form.controls.options; }
   product = signal<ProductDto | CreateOrUpdateProductDto>(null);
   isLoading = signal<boolean>(false);
+
+  form: FormGroup<ProductForm>;
+  optionsFormArray = this.formBuilder.array<FormGroup<OptionForm>>([]);
 
   constructor() {
     this.route.params
@@ -83,6 +87,20 @@ export class AdminProductComponent {
       ...this.product(),
       ...this.form.getRawValue(),
     };
+    dto.options = this.optionsFormArray.getRawValue().map(optionFormValue => {
+      return {
+        optionId: optionFormValue.optionId,
+        optionValues: optionFormValue.optionValues
+          .filter(optionValue => optionValue.isEnabled)
+          .map(optionValue => {
+            return {
+              optionValueId: optionValue.id,
+              isPriceDiffOverridden: optionValue.isPriceDiffOverridden,
+              priceDiff: optionValue.priceDiff,
+            };
+          }),
+      };
+    });
 
     const request = this.isNewProduct()
       ? this.productService.create(dto)
@@ -90,7 +108,10 @@ export class AdminProductComponent {
 
     this.isLoading.set(true);
     request
-      .pipe(finalize(() => this.isLoading.set(false)))
+      .pipe(
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe(
         response => {
           if (this.isNewProduct()) {
@@ -113,7 +134,10 @@ export class AdminProductComponent {
     } else {
       this.isLoading.set(true);
       this.productService.fetchProductById(this.productId())
-        .pipe(finalize(() => this.isLoading.set(false)))
+        .pipe(
+          finalize(() => this.isLoading.set(false)),
+          takeUntilDestroyed(this.destroyRef),
+        )
         .subscribe(
           response => {
             this.product.set(response);
@@ -125,22 +149,16 @@ export class AdminProductComponent {
   }
 
   private buildForm() {
-    const optionsFormArray = this.formBuilder.array(
-      this.product().options.map(option => this.formBuilder.group<SelectedProductOptionDto>(option)),
-    );
     this.form = this.formBuilder.group<ProductForm>({
-      id: this.formBuilder.control(this.product().name),
       name: this.formBuilder.control(this.product().name),
       categoryId: this.formBuilder.control(this.product().categoryId),
       price: this.formBuilder.control(this.product().price),
       photoUrl: this.formBuilder.control(this.product().photoUrl),
       sortOrder: this.formBuilder.control(this.product().sortOrder),
-      options: optionsFormArray,
     });
 
-    optionsFormArray.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.onOptionsFormArrayChange(optionsFormArray.getRawValue()));
+    this.optionsFormArray.clear();
+    this.product().options.forEach(option => this.addSelectedOptionForm(option));
   }
 
   deleteProduct() {
@@ -153,7 +171,10 @@ export class AdminProductComponent {
 
     this.isLoading.set(true);
     this.productService.deleteProduct(this.productId())
-      .pipe(finalize(() => this.isLoading.set(false)))
+      .pipe(
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe(
         () => {
           this.router.navigate(['..'], { relativeTo: this.route });
@@ -163,47 +184,6 @@ export class AdminProductComponent {
       );
   }
 
-  addSelectedOption() {
-    const isPriceDiffOverridden = false;
-
-    this.optionsFormArray.push(
-      this.formBuilder.group({
-        optionId: this.formBuilder.control(null),
-        optionValueId: this.formBuilder.control(null),
-        isPriceDiffOverridden: this.formBuilder.control(isPriceDiffOverridden),
-        priceDiff: this.formBuilder.control({ value: 0, disabled: !isPriceDiffOverridden }),
-      }),
-    );
-  }
-
-  deleteSelectedOption(index: number) {
-    this.optionsFormArray.removeAt(index);
-  }
-
-  getProductOptionValues(optionId: string): ProductOptionValueDto[] {
-    return this.productOptionService.getProductOption(optionId)?.values || [];
-  }
-
-  onOptionsFormArrayChange(options: SelectedProductOptionDto[]): void {
-    options.forEach((option, index) => {
-      const optionGroup = this.optionsFormArray.at(index);
-      if (!option.optionId) {
-        optionGroup.controls.optionValueId.setValue(null, { emitEvent: false });
-      }
-      if (option.isPriceDiffOverridden) {
-        optionGroup.controls.priceDiff.enable({ emitEvent: false })
-      } else {
-        optionGroup.controls.priceDiff.disable({ emitEvent: false })
-
-        const selectedOptionValue = this.productOptionService.getProductOptionValue(
-          option.optionId,
-          option.optionValueId,
-        );
-        optionGroup.controls.priceDiff.setValue(selectedOptionValue?.priceDiff || 0, { emitEvent: false });
-      }
-    });
-  }
-
   getProductOptionsForDropdown(index: number): ProductOptionDto[] {
     const selectedOptionIds = this.optionsFormArray.controls.map(group => group.controls.optionId.getRawValue());
 
@@ -211,5 +191,78 @@ export class AdminProductComponent {
       const selectedOptionIdIndex = selectedOptionIds.indexOf(option.id);
       return selectedOptionIdIndex === index || !selectedOptionIds.includes(option.id);
     });
+  }
+
+  addSelectedOptionForm(selectedProductOption: SelectedProductOptionDto = new SelectedProductOptionDto()): void {
+    const formGroup = this.formBuilder.group<OptionForm>({
+      optionId: this.formBuilder.control(selectedProductOption.optionId),
+      optionValues: this.formBuilder.array<FormGroup<OptionValueForm>>([]),
+    });
+
+    formGroup.controls.optionId.valueChanges
+      .pipe(
+        startWith(formGroup.controls.optionId.getRawValue()),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(optionId => {
+        formGroup.controls.optionValues.clear();
+
+        const option = this.productOptionService.getProductOption(optionId);
+        if (!option) {
+          return;
+        }
+
+        option.values.forEach(optionValue => {
+          const isSelected = selectedProductOption?.optionValues.find(selectedValue => {
+            return selectedValue.optionValueId === optionValue.id;
+          });
+
+          const isEnabled = !!isSelected;
+          const isPriceDiffOverridden = isSelected?.isPriceDiffOverridden ?? false;
+          const priceDiff = isSelected?.priceDiff ?? optionValue.priceDiff;
+
+          const optionValueGroup = this.formBuilder.group<OptionValueForm>({
+            isEnabled: this.formBuilder.control(isEnabled),
+            id: this.formBuilder.control(optionValue.id),
+            name: this.formBuilder.control({ value: optionValue.name, disabled: true }),
+            isPriceDiffOverridden: this.formBuilder.control(isPriceDiffOverridden),
+            priceDiff: this.formBuilder.control(priceDiff),
+          });
+
+          optionValueGroup.controls.isEnabled.valueChanges
+            .pipe(
+              startWith(optionValueGroup.controls.isEnabled.getRawValue()),
+              takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe(isEnabled => {
+              if (isEnabled) {
+                optionValueGroup.controls.isPriceDiffOverridden.enable();
+              } else {
+                optionValueGroup.controls.isPriceDiffOverridden.disable();
+              }
+            });
+
+          formGroup.controls.optionValues.push(optionValueGroup);
+          optionValueGroup.controls.isPriceDiffOverridden.valueChanges
+            .pipe(
+              startWith(optionValueGroup.controls.isPriceDiffOverridden.getRawValue()),
+              takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe(isOverridden => {
+              if (isOverridden) {
+                optionValueGroup.controls.priceDiff.enable();
+              } else {
+                optionValueGroup.controls.priceDiff.disable();
+                optionValueGroup.controls.priceDiff.setValue(optionValue.priceDiff);
+              }
+            });
+        });
+      });
+
+    this.optionsFormArray.push(formGroup);
+  }
+
+  deleteSelectedOption(index: number) {
+    this.optionsFormArray.removeAt(index);
   }
 }

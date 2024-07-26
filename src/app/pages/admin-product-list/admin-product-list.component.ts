@@ -72,6 +72,6 @@ export class AdminProductListComponent implements OnInit {
   }
 
   getOptionsNames(options: SelectedProductOptionDto[]): string {
-    return options.map(option => this.productOptionService.getProductOptionName(option.optionId)).join(', ');
+    return options?.map(option => this.productOptionService.getProductOptionName(option.optionId)).join(', ');
   }
 }
