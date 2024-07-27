@@ -1,15 +1,21 @@
-import { computed, effect, EventEmitter, Injectable, signal } from '@angular/core';
-import { ICartItem, ICartItemSelectedOption } from '../interfaces/cart-item.interface';
+import { computed, effect, EventEmitter, inject, Injectable, signal } from '@angular/core';
 import { ICart } from '../interfaces/cart.interface';
 import { PaymentType } from '../enums/payment-type.enum';
 import { ProductDto } from '../dtos/product.dto';
+import { OrderItemSelectedOptionDto } from '../dtos/order-item-selected-option.dto';
+import { OrderItemDto } from '../dtos/order-item.dto';
+import { OrderService } from './order.service';
+import { Observable, tap } from 'rxjs';
+import { CreateOrUpdateOrderDto } from '../dtos/create-or-update-order.dto';
+import { OrderDto } from '../dtos/order.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
 
-  private persistedCartsKey = `pos-carts`;
+  private readonly orderService = inject(OrderService);
+  private persistedCartsKey = `posh-carts`;
 
   private _carts = signal<ICart[]>([this.buildEmptyCart()]);
   carts = this._carts.asReadonly();
@@ -27,7 +33,7 @@ export class CartService {
     effect(() => this.persistCarts(this._carts()));
   }
 
-  addToCart(product: ProductDto, selectedOptions: ICartItemSelectedOption[] = []): void {
+  addToCart(product: ProductDto, selectedOptions: OrderItemSelectedOptionDto[] = []): void {
     this._carts.update(carts => {
       carts = structuredClone(carts);
       const cart = carts[this.currentCartIndex()];
@@ -98,13 +104,13 @@ export class CartService {
     this._carts.update(carts => structuredClone(carts));
   }
 
-  calcItemPrice(cartItem: ICartItem): number {
+  calcItemPrice(cartItem: OrderItemDto): number {
     const optionsPriceDiff = cartItem.selectedOptions.reduce((acc, option) => acc + option.priceDiff, 0);
 
     return cartItem.price + optionsPriceDiff;
   }
 
-  calcItemCost(cartItem: ICartItem): number {
+  calcItemCost(cartItem: OrderItemDto): number {
     return this.calcItemPrice(cartItem) * cartItem.qty;
   }
 
@@ -117,9 +123,18 @@ export class CartService {
     });
   }
 
-  buy(): void {
-    this.buy$.next();
-    this.deleteCart(this.currentCartIndex());
+  buy(): Observable<OrderDto> {
+    const dto: CreateOrUpdateOrderDto = {
+      paymentType: this.paymentType(),
+      orderItems: this.cartItems(),
+    };
+
+    return this.orderService.create(dto).pipe(tap({
+      next: () => {
+        this.buy$.next();
+        this.deleteCart(this.currentCartIndex());
+      },
+    }));
   }
 
   selectCart(cartIndex: number): void {
@@ -172,7 +187,10 @@ export class CartService {
     return persistedCarts ? JSON.parse(persistedCarts) : [this.buildEmptyCart()];
   }
 
-  private isSelectedOptionsSame(selectedOptions1: ICartItemSelectedOption[], selectedOptions2: ICartItemSelectedOption[]): boolean {
+  private isSelectedOptionsSame(
+    selectedOptions1: OrderItemSelectedOptionDto[],
+    selectedOptions2: OrderItemSelectedOptionDto[],
+  ): boolean {
     if (selectedOptions1.length !== selectedOptions2.length) {
       return false;
     }

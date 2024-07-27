@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 enum NumpadButton {
   Dot = 'DOT',
@@ -15,7 +16,7 @@ enum NumpadButton {
   styleUrl: './cash-calculator.component.scss'
 })
 export class CashCalculatorComponent {
-  cartService = inject(CartService);
+  readonly cartService = inject(CartService);
   readonly dialogRef = inject(MatDialogRef<CashCalculatorComponent>);
 
   numpadButtonEnum = NumpadButton;
@@ -29,6 +30,9 @@ export class CashCalculatorComponent {
 
   private denominations = [10, 20, 50, 100, 200, 500, 1000];
   suggestions: number[] = [];
+
+  isLoading = signal<boolean>(false);
+  buy$ = output<void>();
 
   constructor() {
     this.suggestions = this.buildSuggestions();
@@ -76,9 +80,9 @@ export class CashCalculatorComponent {
     }
   }
 
-  buy(): void {
-    this.cartService.buy();
-    this.dialogRef.close();
+  onBuy(): void {
+    this.isLoading.set(true);
+    this.buy$.emit();
   }
 
   private buildSuggestions(): number[] {

@@ -6,6 +6,8 @@ import { AdminProductOptionListComponent } from './pages/admin-product-option-li
 import { AdminProductOptionComponent } from './pages/admin-product-option/admin-product-option.component';
 import { AdminProductListComponent } from './pages/admin-product-list/admin-product-list.component';
 import { AdminProductComponent } from './pages/admin-product/admin-product.component';
+import { AdminOrderListComponent } from './pages/admin-order-list/admin-order-list.component';
+import { AdminOrderComponent } from './pages/admin-order/admin-order.component';
 
 export const routes: Routes = [
   {
@@ -70,6 +72,20 @@ export const routes: Routes = [
       {
         path: ':productOptionId',
         component: AdminProductOptionComponent,
+      },
+    ]
+  },
+  {
+    path: 'order',
+    children: [
+      {
+        path: '',
+        component: AdminOrderListComponent,
+        pathMatch: 'full',
+      },
+      {
+        path: ':orderId',
+        component: AdminOrderComponent,
       },
     ]
   },

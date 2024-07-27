@@ -1,0 +1,29 @@
+.form {
+  margin: 0 auto;
+  max-width: 500px;
+
+  &__label {
+    margin-top: 0;
+  }
+}
+
+.order-item {
+  display: flex;
+
+  &__qty {
+    width: 50px;
+    padding: 0 12px;
+    text-align: right;
+  }
+
+  &__cell {
+    margin: 0 0 0 auto;
+    padding: 0 12px;
+  }
+
+  &__option {
+    margin: 4px 0 0;
+    font-size: 14px;
+    font-style: italic;
+  }
+}

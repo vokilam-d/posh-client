@@ -27,7 +27,7 @@ export class ProductOptionService {
   cacheProductOptions(): void {
     this.fetchProductOptions().subscribe(
       response => this.cachedProductOptions.set(response),
-      error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорії`),
+      error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося закешувати опції товарів`),
     );
   }
 

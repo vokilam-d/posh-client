@@ -1,0 +1,88 @@
+<app-page-content backUrl="..">
+  <div page-title>Замовлення №{{ order()?.id }}</div>
+
+  <button
+    class="btn btn--danger"
+    page-toolbar-item
+    [disabled]="!order() || isLoading()"
+    (click)="deleteOrder()"
+  >
+    Видалити
+  </button>
+
+
+  @if (order()) {
+    <div class="form">
+      <div class="form__row">
+        <div class="form__label">
+          Дата
+        </div>
+
+        <div class="form__input-container">
+          {{ order().createdAtIso | date:'dd.MM.YYYY HH:mm:ss' }}
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__label">
+          Товари
+        </div>
+
+        <div class="form__input-container">
+          @for (item of order().orderItems; track item.productId) {
+            <div class="order-item">
+              <div class="order-item__qty">
+                {{ item.qty }} x
+              </div>
+              <div class="order-item__name-container">
+                <div class="order-item__name">
+                  {{ item.productName }}
+                </div>
+
+                @for (option of item.selectedOptions; track option.optionId) {
+                  <div class="order-item__option">
+                    {{ option.optionName }}: {{ option.optionValueName }}, {{ option.priceDiff >= 0 ? '+' : '' }}{{ option.priceDiff }} ₴
+                  </div>
+                }
+              </div>
+              <div class="order-item__cell">
+                {{ item.price }} ₴
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__label">
+          Оплата
+        </div>
+
+        <div class="form__input-container">
+          @switch (order().paymentType) {
+            @case (paymentTypeEnum.Cash) {
+              Готівка
+            }
+            @case (paymentTypeEnum.Card) {
+              Картка
+            }
+          }
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__label">
+          Сума
+        </div>
+
+        <div class="form__input-container">
+          {{ order().totalCost }} ₴
+        </div>
+      </div>
+    </div>
+  }
+</app-page-content>
+
+@if (isLoading()) {
+  <app-preloader></app-preloader>
+}

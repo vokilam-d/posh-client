@@ -3,7 +3,7 @@
   height: 100vh;
   overflow: hidden;
 
-  &__navbar {
+  &__sidebar {
     flex-shrink: 0;
   }
 
@@ -12,43 +12,6 @@
     min-width: 0;
     background: #f3f3f3;
     overflow: auto;
-  }
-}
-
-.navbar {
-  display: flex;
-  flex-direction: column;
-  padding: 16px 0;
-  background: #fff;
-
-  &__item {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #999;
-    padding: 12px;
-
-    &:not(&--active):hover {
-      color: color-mix(in srgb, var(--accent) 50%, #999);
-    }
-
-    &--active {
-      color: var(--accent);
-    }
-  }
-
-  &__item-icon {
-    padding: 16px 16px 14px;
-    border-radius: 12px;
-    transition: all 0.2s ease;
-  }
-
-  &__item:not(&__item--active):hover &__item-icon {
-    background: color-mix(in srgb, var(--accent) 3%, #fff);
-  }
-  &__item--active &__item-icon {
-    background: color-mix(in srgb, var(--accent) 10%, #fff);
   }
 }
 

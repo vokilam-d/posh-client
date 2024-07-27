@@ -27,7 +27,7 @@ export class CategoryService {
   cacheCategories(): void {
     this.fetchCategories().subscribe({
       next: response => this.cachedCategories.set(response),
-      error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорії`),
+      error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося закешувати категорії`),
     });
   }
 

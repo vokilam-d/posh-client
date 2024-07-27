@@ -1,11 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ProductOptionService } from '../../services/product-option.service';
+import { OrderService } from '../../services/order.service';
 import { RouterLink } from '@angular/router';
-import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { PageContentComponent } from '../../components/page-content/page-content.component';
 import { PreloaderComponent } from '../../components/page-preloader/preloader.component';
 import { finalize } from 'rxjs';
-import { ProductOptionDto } from '../../dtos/product-option.dto';
+import { OrderDto } from '../../dtos/order.dto';
 import { getHttpErrorMessage } from '../../utils/get-http-error-message.util';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -17,10 +16,12 @@ import {
   MatHeaderRow, MatHeaderRowDef, MatNoDataRow, MatRow, MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { ProductOptionValueDto } from '../../dtos/product-option-value.dto';
+import { OrderItemDto } from '../../dtos/order-item.dto';
+import { DatePipe } from '@angular/common';
+import { PaymentType } from '../../enums/payment-type.enum';
 
 @Component({
-  selector: 'app-admin-product-option-list',
+  selector: 'app-admin-order-list',
   standalone: true,
   imports: [
     RouterLink,
@@ -37,35 +38,38 @@ import { ProductOptionValueDto } from '../../dtos/product-option-value.dto';
     MatHeaderRowDef,
     MatRowDef,
     MatNoDataRow,
+    DatePipe,
   ],
-  templateUrl: './admin-product-option-list.component.html',
-  styleUrl: './admin-product-option-list.component.scss'
+  templateUrl: './admin-order-list.component.html',
+  styleUrl: './admin-order-list.component.scss'
 })
-export class AdminProductOptionListComponent implements OnInit {
+export class AdminOrderListComponent implements OnInit {
 
-  private readonly productOptionService = inject(ProductOptionService);
+  private readonly orderService = inject(OrderService);
   private readonly toastr = inject(ToastrService);
 
   isLoading = signal<boolean>(false);
-  productOptions = signal<ProductOptionDto[]>([]);
-  displayedColumns: (keyof ProductOptionDto)[] = ['name', 'values'];
+  orders = signal<OrderDto[]>([]);
+  displayedColumns: (keyof OrderDto)[] = ['id', 'createdAtIso', 'orderItems', 'paymentType', 'totalCost'];
 
   ngOnInit() {
-    this.fetchProductOptions();
+    this.fetchOrders();
   }
 
-  private fetchProductOptions() {
+  private fetchOrders() {
     this.isLoading.set(true);
 
-    this.productOptionService.fetchProductOptions()
+    this.orderService.fetchOrders()
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe(
-        response => this.productOptions.set(response),
-        error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати опції товарів`),
+        response => this.orders.set(response),
+        error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати список замовлень`),
       );
   }
 
-  getValueNames(values: ProductOptionValueDto[]): string {
-    return values.map(value => value.name).join(', ');
+  getOrderItemNames(orderItems: OrderItemDto[]): string {
+    return orderItems.map(orderItem => orderItem.productName).join(', ');
   }
+
+  protected readonly paymentTypeEnum = PaymentType;
 }

@@ -1,0 +1,16 @@
+.order {
+  &__date {
+    font-size: 12px;
+  }
+}
+
+.mat-column {
+  &-id {
+    width: 60px;
+    text-align: center;
+  }
+
+  &-createdAtIso {
+    width: 150px;
+  }
+}

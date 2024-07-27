@@ -92,8 +92,8 @@
     <button
       class="btn cart__buy"
       [class.cart__buy--with-calculator]="canOpenCashCalculator()"
-      (click)="cartService.buy()"
-      [disabled]="!canBuy()"
+      (click)="buy()"
+      [disabled]="!canBuy() || isLoading()"
     >
       Розрахувати @if (cartService.cartItems().length) { - {{ cartService.totalCost() }} ₴ }
     </button>
@@ -110,3 +110,7 @@
     }
   </div>
 </div>
+
+@if (isLoading()) {
+  <app-preloader></app-preloader>
+}

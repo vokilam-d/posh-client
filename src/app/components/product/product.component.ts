@@ -2,11 +2,11 @@ import { Component, computed, inject, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { ImgComponent } from '../img/img.component';
-import { ICartItemSelectedOption } from '../../interfaces/cart-item.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductDto } from '../../dtos/product.dto';
 import { ProductOptionService } from '../../services/product-option.service';
 import { SelectedProductOptionDto } from '../../dtos/selected-product-option.dto';
+import { OrderItemSelectedOptionDto } from '../../dtos/order-item-selected-option.dto';
 
 @Component({
   selector: 'app-product',
@@ -55,7 +55,7 @@ export class ProductComponent {
       return;
     }
 
-    this.cartService.addToCart(this.product(), this.buildCartItemSelectedOptions());
+    this.cartService.addToCart(this.product(), this.buildOrderItemSelectedOptions());
   }
 
   isAllOptionsSelected(): boolean {
@@ -77,7 +77,7 @@ export class ProductComponent {
     );
   }
 
-  private buildCartItemSelectedOptions(): ICartItemSelectedOption[] {
+  private buildOrderItemSelectedOptions(): OrderItemSelectedOptionDto[] {
     return this.product().options
       .filter(option => this.selectedOptionsMap.has(option.optionId))
       .map(option => {

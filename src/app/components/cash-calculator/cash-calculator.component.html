@@ -60,8 +60,8 @@
 
     <button
       class="btn calc__buy"
-      (click)="buy()"
-      [disabled]="calcChange() < 0"
+      (click)="onBuy()"
+      [disabled]="calcChange() < 0 || isLoading()"
     >
       Розрахувати - {{ cartService.totalCost() }} ₴
     </button>

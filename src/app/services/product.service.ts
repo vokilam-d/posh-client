@@ -24,10 +24,10 @@ export class ProductService {
     this.cacheProducts();
   }
 
-  cacheProducts(): void {
+  private cacheProducts(): void {
     this.fetchProducts().subscribe({
       next: response => this.cachedProducts.set(response),
-      error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорії`),
+      error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося закешувати товари`),
     });
   }
 

@@ -1,8 +1,8 @@
 import { PaymentType } from '../enums/payment-type.enum';
-import { ICartItem } from './cart-item.interface';
+import { OrderItemDto } from '../dtos/order-item.dto';
 
 export interface ICart {
   paymentType: PaymentType;
-  items: ICartItem[];
+  items: OrderItemDto[];
   createdAtIso: string;
 }
