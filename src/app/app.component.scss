@@ -5,6 +5,7 @@
 
   &__sidebar {
     flex-shrink: 0;
+    overflow: auto;
   }
 
   &__content {

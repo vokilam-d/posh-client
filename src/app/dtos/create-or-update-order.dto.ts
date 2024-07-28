@@ -4,4 +4,5 @@ import { OrderItemDto } from './order-item.dto';
 export class CreateOrUpdateOrderDto {
   orderItems: OrderItemDto[];
   paymentType: PaymentType;
+  createdAtIso: string;
 }

@@ -123,10 +123,11 @@ export class CartService {
     });
   }
 
-  buy(): Observable<OrderDto> {
+  buy(): Observable<OrderDto | null> {
     const dto: CreateOrUpdateOrderDto = {
       paymentType: this.paymentType(),
       orderItems: this.cartItems(),
+      createdAtIso: new Date().toISOString(),
     };
 
     return this.orderService.create(dto).pipe(tap({

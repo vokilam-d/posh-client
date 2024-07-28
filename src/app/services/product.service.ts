@@ -1,32 +1,47 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { getHttpErrorMessage } from '../utils/get-http-error-message.util';
-import { Observable, tap } from 'rxjs';
+import { filter, Observable, tap } from 'rxjs';
 import { ProductDto } from '../dtos/product.dto';
 import { CreateOrUpdateProductDto } from '../dtos/create-or-update-product.dto';
 import { ReorderProductsDto, ReorderProductDto } from '../dtos/reorder-products.dto';
+import { ConnectionService } from './connection.service';
+import { CacheService } from './cache.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  cachedProducts = signal<ProductDto[]>([]);
+  cachedProducts = computed<ProductDto[]>(() => this.cacheService.getFromCache<ProductDto[]>(this.cacheTypeKey, []));
 
   private readonly httpClient = inject(HttpClient);
   private readonly toastr = inject(ToastrService);
+  private readonly connectionService = inject(ConnectionService);
+  private readonly cacheService = inject(CacheService);
 
   private readonly apiUrl = `${environment.apiUrl}/products`;
+  private readonly cacheTypeKey = `products`;
 
   constructor() {
-    this.cacheProducts();
+    if (this.connectionService.isOnline) {
+      this.fetchAndCacheProducts();
+    } else {
+      this.connectionService.isOnline$
+        .pipe(
+          filter(isOnline => isOnline),
+          takeUntilDestroyed(),
+        )
+        .subscribe(() => this.fetchAndCacheProducts());
+    }
   }
 
-  private cacheProducts(): void {
+  private fetchAndCacheProducts(): void {
     this.fetchProducts().subscribe({
-      next: response => this.cachedProducts.set(response),
+      next: response => this.addToCache(response),
       error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося закешувати товари`),
     });
   }
@@ -41,17 +56,17 @@ export class ProductService {
 
   create(productDto: CreateOrUpdateProductDto): Observable<ProductDto> {
     return this.httpClient.post<ProductDto>(this.apiUrl, productDto)
-      .pipe(tap(() => this.cacheProducts()));
+      .pipe(tap(() => this.fetchAndCacheProducts()));
   }
 
   update(productId: string, productDto: CreateOrUpdateProductDto): Observable<ProductDto> {
     return this.httpClient.put<ProductDto>(`${this.apiUrl}/${productId}`, productDto)
-      .pipe(tap(() => this.cacheProducts()));
+      .pipe(tap(() => this.fetchAndCacheProducts()));
   }
 
   deleteProduct(productId: string): Observable<ProductDto> {
     return this.httpClient.delete<ProductDto>(`${this.apiUrl}/${productId}`)
-      .pipe(tap(() => this.cacheProducts()));
+      .pipe(tap(() => this.fetchAndCacheProducts()));
   }
 
   reorderProducts(reorderedProducts: ReorderProductDto[]): Observable<ProductDto[]> {
@@ -60,6 +75,10 @@ export class ProductService {
     };
 
     return this.httpClient.post<ProductDto[]>(`${this.apiUrl}/reorder`, dto)
-      .pipe(tap(response => this.cachedProducts.set(response)));
+      .pipe(tap(response => this.addToCache(response)));
+  }
+
+  private addToCache(products: ProductDto[]): void {
+    this.cacheService.addToCache(this.cacheTypeKey, products);
   }
 }

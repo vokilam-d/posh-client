@@ -51,7 +51,12 @@ export class CartComponent {
       )
       .subscribe(
         response => {
-          this.toastr.success(`Замовлення успішно створене`);
+          if (response) {
+            this.toastr.success(`Замовлення успішно створене`);
+          } else {
+            this.toastr.info(`Замовлення авто-створиться після підключення до інтернету`);
+          }
+
           if (calcComponentInstance) {
             calcComponentInstance.dialogRef.close();
           }

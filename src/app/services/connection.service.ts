@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, catchError, finalize, Observable, of, tap, timeout } from 'rxjs';
+import { BehaviorSubject, catchError, distinctUntilChanged, finalize, Observable, of, tap, timeout } from 'rxjs';
 import { CHECK_CONNECTION_STATUS_INTERVAL_MS } from '../constants';
 
 @Injectable({
@@ -9,8 +9,9 @@ import { CHECK_CONNECTION_STATUS_INTERVAL_MS } from '../constants';
 })
 export class ConnectionService {
 
-  isOnline$ = new BehaviorSubject<boolean>(false);
-  get isOnline(): boolean { return this.isOnline$.getValue(); }
+  private readonly _isOnline$ = new BehaviorSubject<boolean>(false);
+  readonly isOnline$ = this._isOnline$.pipe(distinctUntilChanged());
+  get isOnline(): boolean { return this._isOnline$.getValue(); }
 
   private readonly httpClient = inject(HttpClient);
 
@@ -19,16 +20,19 @@ export class ConnectionService {
   constructor() {
   }
 
-  checkConnectionStatus(): Observable<unknown> {
+  checkConnectionStatus(timeoutMs: number = 1000): Observable<unknown> {
     return this.fetchHealth()
       .pipe(
-        timeout(1000),
+        timeout(timeoutMs),
         tap({
-          next: () => this.isOnline$.next(true),
-          error: () => this.isOnline$.next(false),
+          next: () => this._isOnline$.next(true),
+          error: () => this._isOnline$.next(false),
         }),
-        finalize(() => setTimeout(() => this.checkConnectionStatus().subscribe(), CHECK_CONNECTION_STATUS_INTERVAL_MS)),
         catchError(() => of(null)),
+        finalize(() => setTimeout(
+          () => this.checkConnectionStatus(5000).subscribe(),
+          CHECK_CONNECTION_STATUS_INTERVAL_MS,
+        )),
       );
   }
 
