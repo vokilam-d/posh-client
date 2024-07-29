@@ -30,7 +30,7 @@ $posh-palette: map.merge(
 );
 
 // Define the theme object.
-$pos-client-theme: mat.define-theme((
+$posh-client-theme: mat.define-theme((
   color: (
     theme-type: light,
     primary: $posh-palette,
@@ -50,7 +50,7 @@ $pos-typography: mat.define-typography((
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 :root {
-  @include mat.all-component-themes($pos-client-theme);
+  @include mat.all-component-themes($posh-client-theme);
   @include mat.all-component-typographies($pos-typography);
 
   --mat-dialog-container-max-width: 100vw;
@@ -97,7 +97,7 @@ $pos-typography: mat.define-typography((
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.
 // For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
-// @include mat.typography-hierarchy($pos-client-theme);
+// @include mat.typography-hierarchy($posh-client-theme);
 
 // Comment out the line below if you want to use the deprecated `color` inputs.
-// @include mat.color-variants-backwards-compatibility($pos-client-theme);
+// @include mat.color-variants-backwards-compatibility($posh-client-theme);

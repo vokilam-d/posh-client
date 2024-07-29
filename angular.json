@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pos-client": {
+    "posh-client": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -39,7 +39,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/pos-client",
+            "outputPath": "dist/posh-client",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
@@ -90,10 +90,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "pos-client:build:production"
+              "buildTarget": "posh-client:build:production"
             },
             "development": {
-              "buildTarget": "pos-client:build:development"
+              "buildTarget": "posh-client:build:development"
             }
           },
           "defaultConfiguration": "development"
