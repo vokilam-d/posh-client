@@ -6,5 +6,5 @@ export class CreateOrUpdateProductDto {
   categoryId: string = null;
   photoUrl: string = null;
   options: SelectedProductOptionDto[] = [];
-  sortOrder: number = null;
+  sortOrder: number = 0;
 }
