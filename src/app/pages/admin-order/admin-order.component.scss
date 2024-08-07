@@ -1,29 +1,139 @@
-.form {
+.order {
+  max-width: 900px;
   margin: 0 auto;
-  max-width: 500px;
+  padding: 16px 24px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__col {
+    width: 45%;
+  }
+
+  &__row {
+    margin: 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
 
   &__label {
-    margin-top: 0;
+    &--prices {
+      width: 100px;
+    }
+  }
+
+  &__value {
+    font-weight: 700;
+
+    &--prices {
+      width: 110px;
+      text-align: right;
+    }
+
+    &--total-price {
+      font-size: 24px;
+      color: var(--accent);
+    }
+  }
+
+  &__items {
+    min-width: 500px;
+    margin: 16px 0 0;
+    overflow: auto;
+
+    --mat-table-header-headline-size: 14px;
+    --mat-table-row-item-label-text-size: 14px;
+
+    .mat-mdc-footer-row {
+      font-weight: 700;
+    }
+  }
+
+  &__prices {
+    margin: 24px 0 0 auto;
+    width: fit-content;
   }
 }
 
 .order-item {
-  display: flex;
+  transition: all 0.2s ease;
 
-  &__qty {
-    width: 50px;
-    padding: 0 12px;
-    text-align: right;
+  &--expanded {
+    background: #f3f3f3;
+
+    &:hover {
+      background: #eee;
+    }
+
+    .mat-mdc-cell {
+      padding-top: 4px;
+    }
   }
 
-  &__cell {
-    margin: 0 0 0 auto;
-    padding: 0 12px;
+  .mat-column {
+    &-index,
+    &-isExpanded {
+      width: 40px;
+    }
+
+    &-name {
+      width: 30%;
+    }
   }
 
   &__option {
-    margin: 4px 0 0;
-    font-size: 14px;
+    margin: 0 0 2px;
+    color: #333;
+    font-size: 12px;
+    line-height: 1;
     font-style: italic;
+  }
+
+  &__percent {
+    color: #666;
+    font-size: 12px;
+  }
+
+  &__expand {
+    margin: 4px 0 0;
+    font-size: 16px;
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+  }
+  &--expanded &__expand {
+    transform: rotate(0deg);
+  }
+
+  &__price-details {
+    margin: 2px 0 0;
+    line-height: 1;
+    color: #666;
+    font-size: 12px;
+  }
+
+  &__ingredients {
+    margin: 8px 0;
+  }
+
+  &__ingredient {
+    margin: 4px 0 0;
+    color: #666;
+    font-size: 12px;
+    line-height: 1;
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 }
