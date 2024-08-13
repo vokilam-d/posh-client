@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, OnInit } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { ImgComponent } from '../img/img.component';
@@ -16,7 +16,7 @@ import { CreateOrderItemSelectedOptionDto } from '../../dtos/create-order-item-s
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss'
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit {
 
   product = input.required<ProductDto>();
   hasOptions = computed<boolean>(() => this.product().options.length > 0);
@@ -29,6 +29,13 @@ export class ProductComponent {
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.selectedOptionsMap.clear());
   }
+
+  ngOnInit() {
+    this.product().options.forEach(option => {
+      this.selectOptionValue(option.id, option.values[0].id);
+    });
+  }
+
   onClick() {
     if (this.hasOptions()) {
       return;

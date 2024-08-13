@@ -1,6 +1,5 @@
 .product {
   position: relative;
-  width: 120px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -11,10 +10,14 @@
   text-align: left;
   align-items: initial;
   overflow: hidden;
+  transition: all 0.1s ease-in;
+
+  &:not(&--with-options):active {
+    transform: scale(0.92);
+  }
 
   &--with-options {
-    width: 300px;
-    padding-bottom: 12px;
+    padding-bottom: 8px;
   }
 
   &__photo-name {
@@ -30,7 +33,7 @@
 
   &__photo {
     margin: 6px;
-    height: 90px;
+    height: 50px;
     border-radius: 12px;
     overflow: hidden;
   }
@@ -42,29 +45,26 @@
     flex-grow: 2;
     display: flex;
     flex-direction: column;
-    padding: 12px;
+    padding: 12px 6px;
   }
 
   &__name {
     margin: 0 0 4px;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 600;
     word-wrap: break-word;
   }
 
   &__price {
     margin: auto 0 0;
+    font-size: 14px;
   }
   &--with-options &__price {
     margin-top: 4px;
   }
 
   &__options {
-    margin: 0 0 16px;
-  }
-
-  &__option {
-    margin: 6px 0 0;
+    margin: 0 0 2px;
   }
 
   &__add {
@@ -77,9 +77,17 @@
     font-weight: 600;
     transition: all 0.2s ease;
 
-    &:not([disabled]):hover {
-      background: var(--accent);
-      color: var(--accent-text-color);
+    @media (hover: hover) {
+      &:not([disabled]):hover {
+        background: var(--accent);
+        color: var(--accent-text-color);
+      }
+    }
+    @media not hover {
+      &:not([disabled]):active {
+        background: var(--accent);
+        color: var(--accent-text-color);
+      }
     }
 
     &[disabled] {
@@ -94,11 +102,11 @@
   padding: 0 6px;
 
   &__name {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   &__values {
-    margin: 4px 0 0;
+    margin: 2px 0 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -111,7 +119,7 @@
     border: 1px solid #eee;
     border-radius: 100px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
 
     &:last-child {
       margin-right: 0;

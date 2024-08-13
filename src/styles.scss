@@ -5,6 +5,9 @@
 @import "assets/styles/toastr";
 @import "assets/styles/form";
 @import "assets/styles/table";
+@import "assets/styles/mixins";
+
+$tablet-size: 1200px;
 
 :root {
   --text-color: #111;

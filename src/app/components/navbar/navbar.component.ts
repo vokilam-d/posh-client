@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ConnectionService } from '../../services/connection.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { AsyncPipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
     RouterLink,
     MatTooltip,
     AsyncPipe,
+    MatIcon,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'

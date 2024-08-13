@@ -1,91 +1,97 @@
 <div class="cart">
 
-  <div class="cart__items">
-    @for (cartItem of cartService.cartItems(); track index; let index = $index) {
-      <div class="cart__item cart-item">
-        <div class="cart-item__name">
-          {{ cartItem.runtimeState.name }}
-        </div>
+  <div class="cart__scrollable">
+    <div class="cart__items">
+      @for (cartItem of cartService.cartItems(); track index; let index = $index) {
+        <div class="cart__item cart-item">
+          <div class="cart-item__name">
+            {{ cartItem.runtimeState.name }}
+          </div>
 
-        @for (option of cartItem.selectedOptions; track option.optionId) {
-          <div class="cart-item__option">
-            <div class="cart-item__option-name">
-              {{ option.runtimeState.optionName }}
+          @for (option of cartItem.selectedOptions; track option.optionId) {
+            <div class="cart-item__option">
+              <div class="cart-item__option-name">
+                {{ option.runtimeState.optionName }}
+              </div>
+
+              <div class="cart-item__option-value-name">
+                {{ option.runtimeState.optionValueName }}
+              </div>
+            </div>
+          }
+
+          <div class="cart-item__price-counter">
+            <div class="cart-item__price">
+              {{ cartItem.runtimeState.price }} ₴
             </div>
 
-            <div class="cart-item__option-value-name">
-              {{ option.runtimeState.optionValueName }}
+            <div class="cart-item__counter">
+              <button
+                class="cart-item__inc-dec material-symbols-rounded"
+                (click)="cartService.decrementQty(index)"
+              >
+                remove
+              </button>
+
+              <input
+                class="cart-item__count"
+                [(ngModel)]="cartItem.qty"
+                (ngModelChange)="cartService.onQtyManualChange()"
+                type="number"
+                [min]="0"
+              >
+
+              <button
+                class="cart-item__inc-dec material-symbols-rounded"
+                (click)="cartService.incrementQty(index)"
+              >
+                add
+              </button>
+            </div>
+
+            <div class="cart-item__cost">
+              {{ cartService.calcItemCost(cartItem) }} ₴
             </div>
           </div>
-        }
+        </div>
+      }
+    </div>
 
-        <div class="cart-item__price-counter">
-          <div class="cart-item__price">
-            {{ cartItem.runtimeState.price }} ₴
+    <div class="cart__payments">
+      @for (paymentTypeKV of paymentTypeEnum | keyvalue; track paymentTypeKV.key) {
+        <div
+          class="cart__payment payment"
+          [class.payment--selected]="cartService.paymentType() === paymentTypeKV.value"
+          (click)="cartService.setPaymentType(paymentTypeKV.value)"
+        >
+          <div class="payment__icon">
+            @switch (paymentTypeKV.value) {
+              @case (paymentTypeEnum.Cash) {
+                💸
+              }
+              @case (paymentTypeEnum.Card) {
+                💳
+              }
+            }
           </div>
 
-          <div class="cart-item__counter">
-            <button
-              class="cart-item__inc-dec material-symbols-rounded"
-              (click)="cartService.decrementQty(index)"
-            >
-              remove
-            </button>
-
-            <input
-              class="cart-item__count"
-              [(ngModel)]="cartItem.qty"
-              (ngModelChange)="cartService.onQtyManualChange()"
-              type="number"
-              [min]="0"
-            >
-
-            <button
-              class="cart-item__inc-dec material-symbols-rounded"
-              (click)="cartService.incrementQty(index)"
-            >
-              add
-            </button>
-          </div>
-
-          <div class="cart-item__cost">
-            {{ cartService.calcItemCost(cartItem) }} ₴
+          <div class="payment__name">
+            @switch (paymentTypeKV.value) {
+              @case (paymentTypeEnum.Cash) {
+                Готівка
+              }
+              @case (paymentTypeEnum.Card) {
+                Картка
+              }
+            }
           </div>
         </div>
-      </div>
-    }
+      }
+    </div>
   </div>
 
-  <div class="cart__payments">
-    @for (paymentTypeKV of paymentTypeEnum | keyvalue; track paymentTypeKV.key) {
-      <div
-        class="cart__payment payment"
-        [class.payment--selected]="cartService.paymentType() === paymentTypeKV.value"
-        (click)="cartService.setPaymentType(paymentTypeKV.value)"
-      >
-        <div class="payment__icon">
-          @switch (paymentTypeKV.value) {
-            @case (paymentTypeEnum.Cash) {
-              💸
-            }
-            @case (paymentTypeEnum.Card) {
-              💳
-            }
-          }
-        </div>
-
-        <div class="payment__name">
-          @switch (paymentTypeKV.value) {
-            @case (paymentTypeEnum.Cash) {
-              Готівка
-            }
-            @case (paymentTypeEnum.Card) {
-              Картка
-            }
-          }
-        </div>
-      </div>
-    }
+  <div class="cart__price-container">
+    Загалом: <span class="cart__price">{{ cartService.totalCost() }} ₴</span>
   </div>
 
   <div class="cart__buy-container">
@@ -95,7 +101,7 @@
       (click)="buy()"
       [disabled]="!canBuy() || isLoading()"
     >
-      Розрахувати @if (cartService.cartItems().length) { - {{ cartService.totalCost() }} ₴ }
+      Розрахувати
     </button>
 
     @if (canOpenCashCalculator()) {

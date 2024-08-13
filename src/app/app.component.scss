@@ -1,10 +1,11 @@
 .page {
   display: flex;
   height: 100vh;
-  overflow: hidden;
+  min-width: 700px;
 
   &__sidebar {
     flex-shrink: 0;
+    min-width: 0;
     overflow: auto;
   }
 
@@ -14,12 +15,4 @@
     background: #f3f3f3;
     overflow: auto;
   }
-}
-
-.hack-to-preload-font {
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
 }

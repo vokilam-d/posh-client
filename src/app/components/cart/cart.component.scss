@@ -2,11 +2,33 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 12px 24px;
-  overflow: auto;
+  padding: 12px;
+
+  &__scrollable {
+    overflow: auto;
+    min-width: 0;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+  }
 
   &__items {
     margin: 0 0 24px;
+  }
+
+  &__price-container {
+    min-width: 0;
+    flex-shrink: 0;
+    margin: 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__price {
+    color: var(--accent);
+    font-size: 24px;
+    font-weight: 700;
   }
 
   &__payments {
@@ -25,12 +47,14 @@
   }
 
   &__buy-container {
-    margin: 24px 0 0;
+    margin: 12px 0 0;
     display: flex;
   }
 
   &__buy {
     flex-grow: 2;
+    padding-right: 4px;
+    padding-left: 4px;
 
     &--with-calculator {
       border-top-right-radius: 0;

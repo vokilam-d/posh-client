@@ -8,6 +8,7 @@
       @for (product of products(); track product.id) {
         <app-product
           class="category__product"
+          [class.category__product--with-options]="product.options.length"
           [product]="product"
         ></app-product>
       }
