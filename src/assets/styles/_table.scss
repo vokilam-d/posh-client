@@ -11,8 +11,10 @@
   }
 
   &__cell-img {
-    max-width: 40px;
-    max-height: 40px;
+    width: 40px;
+    height: 30px;
     border-radius: 4px;
+    vertical-align: middle;
+    object-fit: cover;
   }
 }

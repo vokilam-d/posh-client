@@ -34,6 +34,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 4px;
+    object-fit: cover;
     font-size: 36px;
     font-weight: 300;
     color: var(--accent);
@@ -41,7 +43,7 @@
       'FILL' 1,
       'wght' 400,
       'GRAD' 0,
-      'opsz' 24
+      'opsz' 24;
   }
 
   &__category-drag-icon {
