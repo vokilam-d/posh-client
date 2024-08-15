@@ -20,6 +20,8 @@ import { MatInput } from '@angular/material/input';
 import { RouteDataKey } from '../../enums/route-data-key.enum';
 import { PAGE_ACTION_ADD } from '../../constants';
 import { RouteParamKey } from '../../enums/route-param-key.enum';
+import { Title } from '@angular/platform-browser';
+import { buildPageTitle } from '../../utils/build-page-title.util';
 
 type CategoryForm = Record<keyof CreateOrUpdateCategoryDto, FormControl>;
 
@@ -59,21 +61,18 @@ export class AdminCategoryComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly title = inject(Title);
 
   constructor() {
     this.isNewCategory = this.route.snapshot.data[RouteDataKey.PageAction] === PAGE_ACTION_ADD;
     this.isNewCategoryBasedOnId = this.route.snapshot.params[RouteParamKey.ItemIdBasedOn];
 
-    if (this.isNewCategory) {
-      this.init();
-    } else {
-      this.route.params
-        .pipe(takeUntilDestroyed(), )
-        .subscribe(params => {
-          this.categoryId.set(params[RouteParamKey.ItemId]);
-          this.init();
-        });
-    }
+    this.route.params
+      .pipe(takeUntilDestroyed(), )
+      .subscribe(params => {
+        this.categoryId.set(params[RouteParamKey.ItemId]);
+        this.init();
+      });
   }
 
   save() {
@@ -94,7 +93,7 @@ export class AdminCategoryComponent {
           if (this.isNewCategory) {
             this.router.navigate(['..', response.id], { relativeTo: this.route }).then();
           } else {
-            this.category.set(response);
+            this.setCategory(response);
           }
           this.toastr.success(`Успішно збережено`);
         },
@@ -114,15 +113,21 @@ export class AdminCategoryComponent {
         )
         .subscribe({
           next: response => {
-            this.category.set(response);
-            this.buildForm();
+            this.setCategory(response);
           },
           error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати категорію`),
         });
     } else {
-      this.category.set(new CreateOrUpdateCategoryDto());
-      this.buildForm();
+      this.setCategory();
     }
+  }
+
+  private setCategory(category?: CategoryDto): void {
+    this.category.set(category ?? new CategoryDto());
+    this.buildForm();
+
+    const title = category ? this.category().name : 'Нова категорія';
+    this.title.setTitle(buildPageTitle(title));
   }
 
   private buildForm() {

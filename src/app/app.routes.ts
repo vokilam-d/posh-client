@@ -20,6 +20,7 @@ export const routes: Routes = [
   },
   {
     path: 'pos',
+    title: 'Термінал',
     children: [
       {
         path: '',
@@ -41,21 +42,25 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        title: 'Категорії',
         component: AdminCategoryListComponent,
         pathMatch: 'full',
       },
       {
         path: 'add',
+        title: '',
         component: AdminCategoryComponent,
         data: { [RouteDataKey.PageAction]: PAGE_ACTION_ADD },
       },
       {
         path: `add/:${RouteParamKey.ItemIdBasedOn}`,
+        title: '',
         component: AdminCategoryComponent,
         data: { [RouteDataKey.PageAction]: PAGE_ACTION_ADD },
       },
       {
         path: `:${RouteParamKey.ItemId}`,
+        title: '',
         component: AdminCategoryComponent,
       },
     ]
@@ -65,21 +70,25 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        title: 'Товари',
         component: AdminProductListComponent,
         pathMatch: 'full',
       },
       {
         path: 'add',
+        title: '',
         component: AdminProductComponent,
         data: { [RouteDataKey.PageAction]: PAGE_ACTION_ADD },
       },
       {
         path: `add/:${RouteParamKey.ItemIdBasedOn}`,
+        title: '',
         component: AdminProductComponent,
         data: { [RouteDataKey.PageAction]: PAGE_ACTION_ADD },
       },
       {
         path: `:${RouteParamKey.ItemId}`,
+        title: '',
         component: AdminProductComponent,
       },
     ]
@@ -89,21 +98,25 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        title: 'Інгредієнти',
         component: AdminIngredientListComponent,
         pathMatch: 'full',
       },
       {
         path: 'add',
+        title: '',
         component: AdminIngredientComponent,
         data: { [RouteDataKey.PageAction]: PAGE_ACTION_ADD },
       },
       {
         path: `add/:${RouteParamKey.ItemIdBasedOn}`,
+        title: '',
         component: AdminIngredientComponent,
         data: { [RouteDataKey.PageAction]: PAGE_ACTION_ADD },
       },
       {
         path: `:${RouteParamKey.ItemId}`,
+        title: '',
         component: AdminIngredientComponent,
       },
     ]
@@ -113,11 +126,13 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        title: 'Замовлення',
         component: AdminOrderListComponent,
         pathMatch: 'full',
       },
       {
         path: `:${RouteParamKey.ItemId}`,
+        title: route => `Замовлення #${route.params[RouteParamKey.ItemId]}`,
         component: AdminOrderComponent,
       },
     ]

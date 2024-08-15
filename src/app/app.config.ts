@@ -5,7 +5,7 @@ import {
   isDevMode,
   provideExperimentalZonelessChangeDetection,
 } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, TitleStrategy, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -16,6 +16,7 @@ import { provideToastr } from 'ngx-toastr';
 import { provideServiceWorker } from '@angular/service-worker';
 import { ConnectionService } from './services/connection.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { PageTitleStrategy } from './services/page-title.strategy';
 
 export function initializeApp(healthService: ConnectionService) {
   return () => healthService.checkConnectionStatus();
@@ -40,6 +41,7 @@ export const appConfig: ApplicationConfig = {
       multi: true,
       deps: [ConnectionService],
     },
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'} }
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
+    { provide: TitleStrategy, useClass: PageTitleStrategy },
   ],
 };

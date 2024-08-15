@@ -37,6 +37,8 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
 import { AutofocusDirective } from '../../directives/autofocus.directive';
 import { roundPriceNumber } from '../../utils/round-price-number.util';
+import { Title } from '@angular/platform-browser';
+import { buildPageTitle } from '../../utils/build-page-title.util';
 
 
 class ProductForm implements Record<keyof CreateOrUpdateProductDto, unknown> {
@@ -121,6 +123,7 @@ export class AdminProductComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly title = inject(Title);
 
   readonly photoUploadUrl = `${environment.apiUrl}/products/photo`;
 
@@ -150,16 +153,12 @@ export class AdminProductComponent {
     this.isNewProduct = this.route.snapshot.data[RouteDataKey.PageAction] === PAGE_ACTION_ADD;
     this.isNewProductBasedOnId = this.route.snapshot.params[RouteParamKey.ItemIdBasedOn];
 
-    if (this.isNewProduct) {
-      this.init();
-    } else {
-      this.route.params
-        .pipe(takeUntilDestroyed(), )
-        .subscribe(params => {
-          this.productId.set(params[RouteParamKey.ItemId]);
-          this.init();
-        });
-    }
+    this.route.params
+      .pipe(takeUntilDestroyed(), )
+      .subscribe(params => {
+        this.productId.set(params[RouteParamKey.ItemId]);
+        this.init();
+      });
   }
 
   getBackToListUrl(): string[] {
@@ -199,8 +198,7 @@ export class AdminProductComponent {
             const url = [this.getBackToListUrl(), response.id].join('');
             this.router.navigate([url], { relativeTo: this.route }).then();
           } else {
-            this.product.set(response);
-            this.buildForm();
+            this.setProduct(response);
           }
         },
         error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося зберегти товар`),
@@ -219,8 +217,7 @@ export class AdminProductComponent {
         )
         .subscribe({
           next: response => {
-            this.product.set(response);
-            this.buildForm();
+            this.setProduct(response);
             const selectedOptionValueMap = this.selectedOptionValueMap$.getValue();
             for (const option of this.product().options) {
               selectedOptionValueMap.set(option.id, option.values[0].id);
@@ -230,9 +227,16 @@ export class AdminProductComponent {
           error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати товар`),
         });
     } else {
-      this.product.set(new CreateOrUpdateProductDto());
-      this.buildForm();
+      this.setProduct();
     }
+  }
+
+  private setProduct(product?: ProductDto): void {
+    this.product.set(product ?? new ProductDto());
+    this.buildForm();
+
+    const title = product ? this.product().name : 'Новий товар';
+    this.title.setTitle(buildPageTitle(title));
   }
 
   private buildForm() {

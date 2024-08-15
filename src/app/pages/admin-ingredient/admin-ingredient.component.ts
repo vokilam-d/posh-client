@@ -21,6 +21,8 @@ import { MatSelect } from '@angular/material/select';
 import { PAGE_ACTION_ADD } from '../../constants';
 import { RouteDataKey } from '../../enums/route-data-key.enum';
 import { RouteParamKey } from '../../enums/route-param-key.enum';
+import { Title } from '@angular/platform-browser';
+import { buildPageTitle } from '../../utils/build-page-title.util';
 
 class IngredientForm implements Record<keyof CreateOrUpdateIngredientDto, unknown> {
   name: FormControl<string>;
@@ -55,6 +57,7 @@ export class AdminIngredientComponent {
   private readonly toastr = inject(ToastrService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly title = inject(Title);
 
   ingredientId = signal<string | null>(null);
   ingredient = signal<IngredientDto>(null);
@@ -69,16 +72,12 @@ export class AdminIngredientComponent {
     this.isNewIngredient = this.route.snapshot.data[RouteDataKey.PageAction] === PAGE_ACTION_ADD;
     this.isNewIngredientBasedOnId = this.route.snapshot.params[RouteParamKey.ItemIdBasedOn];
 
-    if (this.isNewIngredient) {
-      this.init();
-    } else {
-      this.route.params
-        .pipe(takeUntilDestroyed(), )
-        .subscribe(params => {
-          this.ingredientId.set(params[RouteParamKey.ItemId]);
-          this.init();
-        });
-    }
+    this.route.params
+      .pipe(takeUntilDestroyed(), )
+      .subscribe(params => {
+        this.ingredientId.set(params[RouteParamKey.ItemId]);
+        this.init();
+      });
   }
 
   getBackToListUrl(): string[] {
@@ -115,8 +114,7 @@ export class AdminIngredientComponent {
             const url = [this.getBackToListUrl(), response.id].join('');
             this.router.navigate([url], { relativeTo: this.route }).then();
           } else {
-            this.ingredient.set(response);
-            this.buildForm();
+            this.setIngredient(response);
           }
         },
         error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося зберегти інгредієнт`),
@@ -132,15 +130,21 @@ export class AdminIngredientComponent {
         .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: response => {
-            this.ingredient.set(response);
-            this.buildForm();
+            this.setIngredient(response);
           },
           error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося отримати інгредієнт`),
         });
     } else {
-      this.ingredient.set(new IngredientDto());
-      this.buildForm();
+      this.setIngredient();
     }
+  }
+
+  private setIngredient(ingredient?: IngredientDto): void {
+    this.ingredient.set(ingredient ?? new IngredientDto());
+    this.buildForm();
+
+    const title = ingredient ? this.ingredient().name : 'Новий інгредієнт';
+    this.title.setTitle(buildPageTitle(title));
   }
 
   private buildForm() {
