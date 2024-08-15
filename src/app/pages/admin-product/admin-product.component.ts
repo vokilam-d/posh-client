@@ -621,7 +621,7 @@ export class AdminProductComponent {
 
             const primeCost = calcIngredientsTotalPrice(baseIngredients) + calcIngredientsTotalPrice(variantIngredients);
 
-            variantForm.controls.primeCost.setValue(primeCost);
+            variantForm.controls.primeCost.setValue(roundPriceNumber(primeCost));
           }
         });
       });
