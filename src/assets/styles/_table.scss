@@ -8,6 +8,11 @@
         background: color-mix(in srgb, var(--accent) 5%, transparent);
       }
     }
+
+    &--disabled {
+      background: #f0f0f0 !important;
+      --mat-table-row-item-label-text-color: #999;
+    }
   }
 
   &__cell-img {

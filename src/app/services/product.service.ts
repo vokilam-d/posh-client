@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class ProductService {
 
   cachedProducts = computed<ProductDto[]>(() => this.cacheService.getFromCache<ProductDto[]>(this.cacheTypeKey, []));
+  cachedEnabledProducts = computed<ProductDto[]>(() => this.cachedProducts().filter(p => p.isEnabled));
 
   private readonly httpClient = inject(HttpClient);
   private readonly toastr = inject(ToastrService);

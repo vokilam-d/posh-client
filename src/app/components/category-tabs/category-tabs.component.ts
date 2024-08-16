@@ -25,10 +25,13 @@ export class CategoryTabsComponent {
       {
         id: null,
         name: `Всі`,
+        isEnabled: true,
         photoUrl: null,
         sortOrder: null,
+        createdAtIso: null,
+        updatedAtIso: null,
       },
-      ...this.categoryService.cachedCategories(),
+      ...this.categoryService.cachedEnabledCategories(),
     ]
   })
 

@@ -18,6 +18,7 @@ export class IngredientService {
   cachedIngredients = computed<IngredientDto[]>(() => {
     return this.cacheService.getFromCache<IngredientDto[]>(this.cacheTypeKey, []);
   });
+  cachedEnabledIngredients = computed<IngredientDto[]>(() => this.cachedIngredients().filter(i => i.isEnabled));
 
   private readonly httpClient = inject(HttpClient);
   private readonly toastr = inject(ToastrService);
@@ -41,18 +42,14 @@ export class IngredientService {
   }
 
   private fetchAndCacheIngredients(): void {
-    this.fetchIngredients().subscribe(
-      response => this.addToCache(response),
-      error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося закешувати опції товарів`),
-    );
+    this.fetchIngredients().subscribe({
+      next: response => this.addToCache(response),
+      error: error => this.toastr.error(getHttpErrorMessage(error), `Не вдалося закешувати опції товарів`),
+    });
   }
 
   getIngredient(ingredientId: string): IngredientDto {
     return this.cachedIngredients().find(ingredient => ingredient.id === ingredientId);
-  }
-
-  getIngredientName(ingredientId: string): string {
-    return this.getIngredient(ingredientId)?.name;
   }
 
   fetchIngredients(): Observable<IngredientDto[]> {

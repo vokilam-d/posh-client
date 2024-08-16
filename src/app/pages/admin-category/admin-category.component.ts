@@ -22,6 +22,7 @@ import { PAGE_ACTION_ADD } from '../../constants';
 import { RouteParamKey } from '../../enums/route-param-key.enum';
 import { Title } from '@angular/platform-browser';
 import { buildPageTitle } from '../../utils/build-page-title.util';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 type CategoryForm = Record<keyof CreateOrUpdateCategoryDto, FormControl>;
 
@@ -39,6 +40,7 @@ type CategoryForm = Record<keyof CreateOrUpdateCategoryDto, FormControl>;
     MatFormField,
     MatInput,
     MatLabel,
+    MatSlideToggle,
   ],
   templateUrl: './admin-category.component.html',
   styleUrl: './admin-category.component.scss'
@@ -132,6 +134,7 @@ export class AdminCategoryComponent {
 
   private buildForm() {
     this.form = this.formBuilder.group<CreateOrUpdateCategoryDto>({
+      isEnabled: this.category().isEnabled,
       name: this.category().name,
       photoUrl: this.category().photoUrl,
       sortOrder: this.category().sortOrder,

@@ -19,6 +19,7 @@ export class CategoryService {
   cachedCategories = computed<CategoryDto[]>(() => {
     return this.cacheService.getFromCache<CategoryDto[]>(this.cacheTypeKey, []);
   });
+  cachedEnabledCategories = computed<CategoryDto[]>(() => this.cachedCategories().filter(c => c.isEnabled));
 
   private readonly httpClient = inject(HttpClient);
   private readonly toastr = inject(ToastrService);

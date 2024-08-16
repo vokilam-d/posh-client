@@ -39,9 +39,11 @@ import { AutofocusDirective } from '../../directives/autofocus.directive';
 import { roundPriceNumber } from '../../utils/round-price-number.util';
 import { Title } from '@angular/platform-browser';
 import { buildPageTitle } from '../../utils/build-page-title.util';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 
 class ProductForm implements Record<keyof CreateOrUpdateProductDto, unknown> {
+  isEnabled: FormControl<boolean>;
   name: FormControl<string>;
   categoryId: FormControl<string>;
   photoUrl: FormControl<string>;
@@ -110,6 +112,7 @@ type VariantForCopy = {
     MatMenuItem,
     MatTooltip,
     AutofocusDirective,
+    MatSlideToggle,
   ],
   templateUrl: './admin-product.component.html',
   styleUrl: './admin-product.component.scss'
@@ -241,6 +244,7 @@ export class AdminProductComponent {
 
   private buildForm() {
     this.form = this.formBuilder.group<ProductForm>({
+      isEnabled: this.formBuilder.control(this.product().isEnabled),
       name: this.formBuilder.control(this.product().name),
       categoryId: this.formBuilder.control(this.product().categoryId),
       photoUrl: this.formBuilder.control(this.product().photoUrl),
@@ -408,9 +412,15 @@ export class AdminProductComponent {
   getIngredientsForDropdown(
     ingredientsFormArray: FormArray<FormGroup<IngredientForm>>,
     currentIngredientIndex: number,
+    isOption: boolean,
   ): IngredientDto[] {
-    const selectedIngredientIds = ingredientsFormArray.getRawValue().map(ing => ing.ingredientId);
-    return this.ingredientService.cachedIngredients().filter(ingredient => {
+    const selectedIngredients = ingredientsFormArray.getRawValue();
+    if (isOption) {
+      selectedIngredients.push(...this.form.controls.ingredients.getRawValue());
+    }
+    const selectedIngredientIds = selectedIngredients.map(ing => ing.ingredientId);
+
+    return this.ingredientService.cachedEnabledIngredients().filter(ingredient => {
       const indexOfSelected = selectedIngredientIds.indexOf(ingredient.id);
       return indexOfSelected === currentIngredientIndex || indexOfSelected === -1;
     });

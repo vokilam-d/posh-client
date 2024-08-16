@@ -23,8 +23,10 @@ import { RouteDataKey } from '../../enums/route-data-key.enum';
 import { RouteParamKey } from '../../enums/route-param-key.enum';
 import { Title } from '@angular/platform-browser';
 import { buildPageTitle } from '../../utils/build-page-title.util';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 class IngredientForm implements Record<keyof CreateOrUpdateIngredientDto, unknown> {
+  isEnabled: FormControl<boolean>;
   name: FormControl<string>;
   price: FormControl<number>;
   qty: FormControl<number>;
@@ -47,6 +49,7 @@ class IngredientForm implements Record<keyof CreateOrUpdateIngredientDto, unknow
     MatButton,
     MatAnchor,
     RouterLink,
+    MatSlideToggle,
   ],
   templateUrl: './admin-ingredient.component.html',
   styleUrl: './admin-ingredient.component.scss'
@@ -149,6 +152,7 @@ export class AdminIngredientComponent {
 
   private buildForm() {
     this.form = this.formBuilder.group<IngredientForm>({
+      isEnabled: this.formBuilder.control(this.ingredient().isEnabled),
       name: this.formBuilder.control(this.ingredient().name),
       qty: this.formBuilder.control(this.ingredient().qty),
       price: this.formBuilder.control(this.ingredient().price),

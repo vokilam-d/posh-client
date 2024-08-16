@@ -27,12 +27,12 @@ export class PosComponent {
   products = computed(() => {
     const categoryId = this.categoryId();
 
-    return this.productsService.cachedProducts().filter(product => {
+    return this.productsService.cachedEnabledProducts().filter(product => {
       if (!categoryId) {
         return true;
-      } else {
-        return product.categoryId === categoryId;
       }
+
+      return product.categoryId === categoryId;
     });
   });
 

@@ -25,6 +25,14 @@
       border: none;
       background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%2300BC00FF' stroke-width='3' stroke-dasharray='9' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
     }
+
+    &--disabled {
+      background-color: color-mix(in srgb, var(--error) 10%, #fff);
+
+      &:hover {
+        background-color: color-mix(in srgb, var(--error) 15%, #fff);
+      }
+    }
   }
 
   &__photo {
@@ -52,6 +60,19 @@
     left: 5px;
     font-size: 16px;
     color: #999;
+  }
+
+  &__disabled {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    padding: 2px 4px;
+    background:
+      color-mix(in srgb, var(--error) 30%, #fff);
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--error);
   }
 
   &__products-count {

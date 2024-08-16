@@ -1,0 +1,17 @@
+.mat-column {
+  &-photoUrl {
+    width: 70px;
+  }
+
+  &-createdAtIso,
+  &-updatedAtIso {
+    font-size: 12px;
+  }
+
+  &-isEnabled {
+    &.danger {
+      color: lch(from var(--error) calc(l - 20) c h);
+      background: color-mix(in srgb, var(--error) 15%, #fff);
+    }
+  }
+}

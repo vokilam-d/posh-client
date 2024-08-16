@@ -23,6 +23,7 @@ import {
 import { CategoryService } from '../../services/category.service';
 import { buildPhotoUrl } from '../../utils/build-photo-url.util';
 import { MatAnchor } from '@angular/material/button';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-admin-product-list',
@@ -43,6 +44,7 @@ import { MatAnchor } from '@angular/material/button';
     MatRowDef,
     MatNoDataRow,
     MatAnchor,
+    DatePipe,
   ],
   templateUrl: './admin-product-list.component.html',
   styleUrl: './admin-product-list.component.scss'
@@ -55,7 +57,7 @@ export class AdminProductListComponent implements OnInit {
 
   isLoading = signal<boolean>(false);
   products = signal<ProductDto[]>([]);
-  displayedColumns: ((keyof ProductDto) | string)[] = ['photoUrl', 'name', 'price', 'categoryId', 'options'];
+  displayedColumns: ((keyof ProductDto) | string)[] = ['photoUrl', 'name', 'price', 'categoryId', 'options', 'isEnabled', 'createdAtIso', 'updatedAtIso'];
 
   ngOnInit() {
     this.fetchProducts();

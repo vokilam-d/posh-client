@@ -10,10 +10,17 @@
     @for (category of categories(); track category.id) {
       <a
         class="categories__category"
+        [class.categories__category--disabled]="!category.isEnabled"
         [routerLink]="[category.id]"
         cdkDrag
       >
         <span class="categories__category-drag-icon material-symbols-rounded">drag_indicator</span>
+
+        @if (!category.isEnabled) {
+          <span class="categories__disabled">
+            Вимкнено
+          </span>
+        }
 
         @if (category.photoUrl) {
           <img class="categories__photo" [src]="buildPhotoUrl(category.photoUrl)" alt="">

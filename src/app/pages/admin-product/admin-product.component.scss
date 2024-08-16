@@ -15,6 +15,12 @@
     }
   }
 
+  &__photo-col {
+    align-self: center;
+    max-width: 150px;
+    margin: 0 36px 0 0;
+  }
+
   &__delete {
     padding: 8px;
     transition: color 0.2s ease;

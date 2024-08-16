@@ -3,6 +3,7 @@ import { OptionVariantDto } from './option-variant.dto';
 import { OptionDto } from './option.dto';
 
 export class CreateOrUpdateProductDto {
+  isEnabled: boolean = true;
   name: string = '';
   categoryId: string = null;
   ingredients: SelectedIngredientDto[] = [];
