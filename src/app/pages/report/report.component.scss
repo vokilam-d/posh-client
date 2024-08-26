@@ -1,0 +1,118 @@
+::ng-deep {
+  // override material styles
+  .datepicker__calendar {
+    width: 400px !important;
+    height: 294px !important;
+
+    .mat-calendar-controls {
+      margin-top: 1%;
+      margin-bottom: 1%;
+    }
+
+    .mat-calendar-body-cell-container,
+    .mat-calendar-body-label {
+      padding: 18px 26px !important;
+    }
+
+    .mat-calendar-table-header th {
+      padding-bottom: 2px;
+    }
+  }
+}
+
+.datepicker {
+  position: relative;
+
+  &__field {
+    position: absolute;
+    right: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  &__actions {
+    flex-grow: 2;
+  }
+
+  &__aliases {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__alias {
+    padding: 4px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+
+    &--selected,
+    &:hover {
+      background: color-mix(in srgb, var(--accent) 20%, transparent);
+      border-color: var(--accent);
+    }
+  }
+
+  &__buttons {
+    margin: 12px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &__open {
+    padding-left: 24px;
+    padding-right: 24px;
+    font-size: 16px;
+  }
+
+  &__range {
+    font-size: 14px;
+  }
+
+  &__open-icon {
+    color: var(--accent);
+
+    &--chevron {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.order {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 24px;
+
+  &__item {
+    padding: 24px;
+    background: var(--color);
+    border: 1px solid lch(from var(--color) calc(l - 12) c h);
+    border-radius: 12px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+    &:nth-child(1) {
+      --color: #9de19a;
+    }
+    &:nth-child(2) {
+      --color: #a4c5ea;
+    }
+    &:nth-child(3) {
+      --color: #bca9e1;
+    }
+    &:nth-child(4) {
+      --color: #e7eca3;
+    }
+  }
+
+  &__value {
+    margin: 12px 0 0;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  &__suffix {
+    font-size: 18px;
+  }
+}

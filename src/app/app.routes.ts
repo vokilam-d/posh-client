@@ -11,6 +11,7 @@ import { AdminOrderComponent } from './pages/admin-order/admin-order.component';
 import { PAGE_ACTION_ADD } from './constants';
 import { RouteDataKey } from './enums/route-data-key.enum';
 import { RouteParamKey } from './enums/route-param-key.enum';
+import { ReportComponent } from './pages/report/report.component';
 
 export const routes: Routes = [
   {
@@ -136,6 +137,10 @@ export const routes: Routes = [
         component: AdminOrderComponent,
       },
     ]
+  },
+  {
+    path: 'reports',
+    component: ReportComponent,
   },
   {
     path: '**',

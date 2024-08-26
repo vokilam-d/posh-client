@@ -4,6 +4,9 @@
   "newProjectRoot": "projects",
   "projects": {
     "posh-client": {
+      "i18n": {
+        "sourceLocale": "uk"
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {

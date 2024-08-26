@@ -4,7 +4,7 @@
   <ng-container page-toolbar>
     @if (!isNewProduct) {
       <button
-        class="mat-btn mat-btn--danger mat-btn--toolbar"
+        class="mdc-button--danger mdc-button--toolbar"
         mat-raised-button
         [disabled]="!product() || isLoading()"
         (click)="deleteProduct()"
@@ -13,7 +13,7 @@
       </button>
 
       <a
-        class="mat-btn mat-btn--toolbar"
+        class="mdc-button--toolbar"
         mat-raised-button
         [routerLink]="['..', 'add', productId()]"
       >
@@ -22,7 +22,7 @@
     }
 
     <button
-      class="mat-btn mat-btn--default mat-btn--toolbar"
+      class="mdc-button--default mdc-button--toolbar"
       mat-raised-button
       [disabled]="!product() || isLoading()"
       (click)="save()"
@@ -31,7 +31,7 @@
     </button>
 
     <button
-      class="mat-btn mat-btn--success mat-btn--toolbar"
+      class="mdc-button--success mdc-button--toolbar"
       mat-raised-button
       [disabled]="!product() || isLoading()"
       (click)="save('close')"
@@ -104,7 +104,7 @@
 
           <button
             mat-raised-button
-            class="mat-btn mat-btn--default mat-btn--sharp"
+            class="mdc-button--default mdc-button--sharp"
             (click)="addNewIngredient(form.controls.ingredients)"
           >
             <mat-icon>add</mat-icon> Додати новий інгредієнт
@@ -122,7 +122,7 @@
 
           <button
             mat-raised-button
-            class="mat-btn mat-btn--default mat-btn--sharp"
+            class="mdc-button--default mdc-button--sharp"
             (click)="addNewOption()"
           >
             <mat-icon>add</mat-icon>Додати нову опцію
@@ -259,7 +259,7 @@
               <div>
                 <button
                   mat-raised-button
-                  class="mat-btn mat-btn--default mat-btn--sharp"
+                  class="mdc-button--default mdc-button--sharp"
                   (click)="addNewIngredient(selectedVariant.form.controls.ingredients)"
                 >
                   <mat-icon>add</mat-icon> Додати новий інгредієнт

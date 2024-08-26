@@ -1,0 +1,101 @@
+<app-page-content>
+  <ng-container page-title>Статистика</ng-container>
+
+  <ng-container page-toolbar>
+    <div class="datepicker">
+      <mat-form-field class="datepicker__field">
+        <mat-label>Введіть діапазон дат</mat-label>
+        <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="rangePicker" [max]="today">
+          <input matStartDate formControlName="start" placeholder="Початкова дата" (dateChange)="onDateManualChange()">
+          <input matEndDate formControlName="end" placeholder="Кінцева дата" (dateChange)="onDateManualChange()">
+        </mat-date-range-input>
+
+        <mat-date-range-picker #rangePicker panelClass="datepicker__calendar">
+          <mat-date-range-picker-actions>
+            <div class="datepicker__actions">
+              <div class="datepicker__aliases">
+                @for (alias of dateAliases; track alias.value) {
+                  <button
+                    class="datepicker__alias"
+                    [class.datepicker__alias--selected]="alias.value === selectedDateAlias"
+                    (click)="selectDateAlias(alias.value)"
+                  >
+                    {{ alias.label }}
+                  </button>
+                }
+              </div>
+
+              <div class="datepicker__buttons">
+                <button mat-button matDateRangePickerCancel>Відмінити</button>
+                <button mat-raised-button matDateRangePickerApply>Готово</button>
+              </div>
+            </div>
+          </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+      </mat-form-field>
+
+      <button class="datepicker__open" mat-raised-button (click)="rangePicker.open()">
+        <mat-icon class="datepicker__open-icon">calendar_month</mat-icon>
+
+        @if (selectedDateAlias) {
+          {{ getSelectedDateAliasLabel() }}
+          @if (selectedDateAlias !== aliasesEnum.Today && selectedDateAlias !== aliasesEnum.All) {
+            <span class="datepicker__range">(<ng-container *ngTemplateOutlet="selectedRangeTmpl"></ng-container>)</span>
+          }
+        } @else {
+          <ng-container *ngTemplateOutlet="selectedRangeTmpl"></ng-container>
+        }
+
+        <ng-template #selectedRangeTmpl>{{ dateRangeForm.controls.start.getRawValue() | date:'d MMMM' }}@if (!isSelectedSameDate()) { – {{  dateRangeForm.controls.end.getRawValue() | date:'d MMMM' }}}</ng-template>
+
+        <mat-icon class="datepicker__open-icon datepicker__open-icon--chevron" iconPositionEnd>chevron_right</mat-icon>
+      </button>
+    </div>
+
+  </ng-container>
+
+  <div class="reports">
+    <div class="reports__order order">
+      <div class="order__item">
+        <div class="order__label">
+          Виторг
+        </div>
+        <div class="order__value">
+          {{ orderReport()?.price }} <span class="order__suffix">₴</span>
+        </div>
+      </div>
+
+      <div class="order__item">
+        <div class="order__label">
+          Чеки
+        </div>
+        <div class="order__value">
+          {{ orderReport()?.orderCount }} <span class="order__suffix">шт.</span>
+        </div>
+      </div>
+
+      <div class="order__item">
+        <div class="order__label">
+          Середній чек
+        </div>
+        <div class="order__value">
+          {{ orderReport()?.avgPrice }} <span class="order__suffix">₴</span>
+        </div>
+      </div>
+
+      <div class="order__item">
+        <div class="order__label">
+          Витрати
+        </div>
+        <div class="order__value">
+          {{ orderReport()?.primeCost }} <span class="order__suffix">₴</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-content>
+
+@if (isLoading()) {
+  <app-preloader></app-preloader>
+}
+

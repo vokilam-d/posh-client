@@ -4,7 +4,7 @@
   <ng-container page-toolbar>
     @if (!isNewCategory) {
       <button
-        class="mat-btn mat-btn--danger mat-btn--toolbar"
+        class="mdc-button--danger mdc-button--toolbar"
         mat-raised-button
         [disabled]="!category() || isLoading()"
         (click)="deleteCategory()"
@@ -14,7 +14,7 @@
     }
 
     <button
-      class="mat-btn mat-btn--success mat-btn--toolbar"
+      class="mdc-button--success mdc-button--toolbar"
       mat-raised-button
       [disabled]="!category() || isLoading()"
       (click)="save()"

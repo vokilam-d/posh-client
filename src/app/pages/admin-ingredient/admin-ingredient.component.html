@@ -4,7 +4,7 @@
   <ng-container page-toolbar>
     @if (!isNewIngredient) {
       <button
-        class="mat-btn mat-btn--danger mat-btn--toolbar"
+        class="mdc-button--danger mdc-button--toolbar"
         mat-raised-button
         [disabled]="!ingredient() || isLoading()"
         (click)="deleteIngredient()"
@@ -13,7 +13,7 @@
       </button>
 
       <a
-        class="mat-btn mat-btn--toolbar"
+        class="mdc-button--toolbar"
         mat-raised-button
         [routerLink]="['..', 'add', ingredientId()]"
       >
@@ -22,7 +22,7 @@
     }
 
     <button
-      class="mat-btn mat-btn--toolbar"
+      class="mdc-button--toolbar"
       mat-raised-button
       [disabled]="!ingredient() || isLoading()"
       (click)="save()"
@@ -31,7 +31,7 @@
     </button>
 
     <button
-      class="mat-btn mat-btn--success mat-btn--toolbar"
+      class="mdc-button--success mdc-button--toolbar"
       mat-raised-button
       [disabled]="!ingredient() || isLoading()"
       (click)="save('close')"

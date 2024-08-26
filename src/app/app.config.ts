@@ -17,6 +17,8 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { ConnectionService } from './services/connection.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { PageTitleStrategy } from './services/page-title.strategy';
+import { DateAdapter, provideNativeDateAdapter } from '@angular/material/core';
+import { CustomDateAdapter } from './adapters/custom-date-adapter';
 
 export function initializeApp(healthService: ConnectionService) {
   return () => healthService.checkConnectionStatus();
@@ -43,5 +45,7 @@ export const appConfig: ApplicationConfig = {
     },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
     { provide: TitleStrategy, useClass: PageTitleStrategy },
+    provideNativeDateAdapter(),
+    { provide: DateAdapter, useClass: CustomDateAdapter },
   ],
 };

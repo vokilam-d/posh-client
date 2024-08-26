@@ -63,6 +63,8 @@ $posh-typography: mat.define-typography((
   --mdc-outlined-text-field-hover-outline-color: #aaaaaa;
 
   --mdc-protected-button-container-height: 36px;
+
+  --mat-datepicker-calendar-date-in-range-state-background-color: color-mix(in srgb, var(--accent) 50%, #fff);
 }
 
 .mat-mdc-notch-piece {
@@ -124,12 +126,13 @@ $posh-typography: mat.define-typography((
   height: auto;
 }
 
-.mat-btn {
+.mdc-button {
   &#{&}#{&}#{&} {
     transition: background-color 0.2s ease;
 
     --mdc-protected-button-label-text-color: var(--text-color);
     --mat-protected-button-horizontal-padding: 16px;
+    --mat-protected-button-ripple-color: #{mat.get-theme-color($posh-client-theme, primary, 50)};
 
     &--success {
       --mdc-protected-button-label-text-color: #fff;
@@ -163,5 +166,24 @@ $posh-typography: mat.define-typography((
     --mat-menu-item-label-text-weight: 400;
     min-height: 36px;
     border-bottom: 1px solid #ddd;
+  }
+}
+
+.mat-calendar {
+  [aria-hidden=true] .mat-calendar-body-label {
+    display: none;
+  }
+  .mat-calendar-body-label {
+    visibility: hidden;
+  }
+
+  .mat-calendar-previous-button::after,
+  .mat-calendar-next-button::after {
+    margin: 13.5px;
+  }
+
+  .mat-calendar-previous-button,
+  .mat-calendar-next-button {
+    --mdc-icon-button-state-layer-size: 36px;
   }
 }

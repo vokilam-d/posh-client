@@ -28,6 +28,7 @@ export class NavbarComponent {
     { route: 'product', iconName: 'coffee', tooltip: 'Товари' },
     { route: 'ingredient', iconName: 'grocery', tooltip: 'Інгредієнти' },
     { route: 'order', iconName: 'order_approve', tooltip: 'Замовлення' },
+    { route: 'reports', iconName: 'chart_data', tooltip: 'Статистика' },
   ];
 
 }

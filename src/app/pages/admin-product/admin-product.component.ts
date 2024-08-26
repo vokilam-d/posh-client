@@ -259,7 +259,7 @@ export class AdminProductComponent {
       variants: this.formBuilder.array<FormGroup<VariantForm>>([]),
     });
 
-    // add later, so "this.buildVariantForm()" has reference to "this.form"
+    // push groups later, so "this.buildVariantForm()" has reference to "this.form"
     this.product().variants.forEach(variant => {
       this.form.controls.variants.push(this.buildVariantForm(variant));
     });
