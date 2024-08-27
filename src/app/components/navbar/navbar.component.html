@@ -1,8 +1,8 @@
 <div class="page__sidebar navbar">
-  @for (item of navbarItems; track item.route) {
+  @for (item of navbarItems; track item.path) {
     <a
       class="navbar__item"
-      [routerLink]="item.route"
+      [routerLink]="item.path"
       routerLinkActive="navbar__item--active"
       [matTooltip]="item.tooltip"
       matTooltipPosition="after"
@@ -13,12 +13,12 @@
   }
 
   @if (!(connectionService.isOnline$ | async)) {
-    <span
-      class="navbar__no-wifi material-symbols-rounded"
+    <mat-icon
+      class="navbar__no-wifi"
       matTooltip="Немає зʼєднання з інтернетом"
       matTooltipPosition="after"
     >
       wifi_off
-    </span>
+    </mat-icon>
   }
 </div>

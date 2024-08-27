@@ -22,6 +22,10 @@ export const routes: Routes = [
   {
     path: 'pos',
     title: 'Термінал',
+    data: {
+      isInNavbar: true,
+      iconName: 'home',
+    },
     children: [
       {
         path: '',
@@ -40,10 +44,14 @@ export const routes: Routes = [
   },
   {
     path: 'category',
+    title: 'Категорії',
+    data: {
+      isInNavbar: true,
+      iconName: 'table_chart',
+    },
     children: [
       {
         path: '',
-        title: 'Категорії',
         component: AdminCategoryListComponent,
         pathMatch: 'full',
       },
@@ -68,10 +76,14 @@ export const routes: Routes = [
   },
   {
     path: 'product',
+    title: 'Товари',
+    data: {
+      isInNavbar: true,
+      iconName: 'coffee',
+    },
     children: [
       {
         path: '',
-        title: 'Товари',
         component: AdminProductListComponent,
         pathMatch: 'full',
       },
@@ -96,10 +108,14 @@ export const routes: Routes = [
   },
   {
     path: 'ingredient',
+    title: 'Інгредієнти',
+    data: {
+      isInNavbar: true,
+      iconName: 'grocery',
+    },
     children: [
       {
         path: '',
-        title: 'Інгредієнти',
         component: AdminIngredientListComponent,
         pathMatch: 'full',
       },
@@ -124,10 +140,14 @@ export const routes: Routes = [
   },
   {
     path: 'order',
+    title: 'Замовлення',
+    data: {
+      isInNavbar: true,
+      iconName: 'order_approve',
+    },
     children: [
       {
         path: '',
-        title: 'Замовлення',
         component: AdminOrderListComponent,
         pathMatch: 'full',
       },
@@ -140,7 +160,12 @@ export const routes: Routes = [
   },
   {
     path: 'reports',
+    title: 'Статистика',
     component: ReportComponent,
+    data: {
+      isInNavbar: true,
+      iconName: 'chart_data',
+    },
   },
   {
     path: '**',
