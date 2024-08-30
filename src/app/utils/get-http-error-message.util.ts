@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { IErrorResponse } from '../interfaces/error-response.interface';
+import { ResponseDto } from '../dtos/response.dto';
 
 interface ValidationError {
   /**
@@ -29,7 +30,7 @@ interface ValidationError {
 export const getHttpErrorMessage = (httpError: HttpErrorResponse): string => {
   let message = '';
 
-  if (httpError.error && httpError.error.message) {
+  if (httpError.error) {
     message += buildErrorMessage(httpError.error);
   } else {
     message += httpError.statusText;
@@ -38,7 +39,7 @@ export const getHttpErrorMessage = (httpError: HttpErrorResponse): string => {
   return message;
 }
 
-const buildErrorMessage = (response: IErrorResponse): string => {
+const buildErrorMessage = (response: ResponseDto): string => {
   const errors: string[] = [];
 
   if (typeof response.message === 'string') {
