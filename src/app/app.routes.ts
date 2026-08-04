@@ -13,11 +13,13 @@ import { RouteDataKey } from './enums/route-data-key.enum';
 import { RouteParamKey } from './enums/route-param-key.enum';
 import { ReportComponent } from './pages/report/report.component';
 
+const mainPageRedirectTo = 'pos/category';
+
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'pos/category',
+    redirectTo: mainPageRedirectTo,
   },
   {
     path: 'pos',
@@ -169,6 +171,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: mainPageRedirectTo,
   }
 ];
